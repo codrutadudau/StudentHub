@@ -6,18 +6,30 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "USER")
-
+@Table(name = "user")
 
 public class User {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private int id;
+
+    @Column(nullable = true, length = 100)
     private String firstName;
+
+    @Column(nullable = true, length = 100)
     private String lastName;
+
+    @Column(nullable = true, length = 100)
     private String email;
+
+    @Column(nullable = true, length = 50)
     private String password;
+
+    @Column(nullable = true, length = 15)
     private String phoneNumber;
+
+    @Column(nullable = true, length = 15)
+    private String phoneNumberr;
 
     public void setFirstName(String firstName) { this.firstName = firstName; }
 

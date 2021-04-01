@@ -28,9 +28,6 @@ public class User {
     @Column(nullable = true, length = 15)
     private String phoneNumber;
 
-    @Column(nullable = true, length = 15)
-    private String phoneNumberr;
-
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
     public void setLastName(String lastName) { this.lastName = lastName; }

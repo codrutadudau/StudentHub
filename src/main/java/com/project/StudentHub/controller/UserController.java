@@ -1,6 +1,6 @@
 package com.project.StudentHub.controller;
 
-import com.project.StudentHub.interfaces.UserInterface;
+import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.model.User;
 import com.project.StudentHub.model.UserUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserInterface userInterface;
+    private UserRepository userInterface;
 
     @PostMapping("/users")
     public User addUser(@RequestBody User user){

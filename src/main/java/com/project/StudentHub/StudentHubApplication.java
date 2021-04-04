@@ -6,8 +6,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-
 public class StudentHubApplication {
-	public static void main(String[] args) { SpringApplication.run(StudentHubApplication.class, args);
-	}
+	public static void main(String[] args) { SpringApplication.run(StudentHubApplication.class, args); }
 }

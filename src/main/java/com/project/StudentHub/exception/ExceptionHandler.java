@@ -32,8 +32,7 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationError(MethodArgumentNotValidException ex){
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), "Entity validation error!", ex.getBindingResult().getFieldError().getDefaultMessage());
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), "Entity validation error", ex.getBindingResult().getFieldError().getDefaultMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
-
 }

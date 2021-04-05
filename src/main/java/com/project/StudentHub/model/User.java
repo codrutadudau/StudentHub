@@ -16,10 +16,12 @@ public class User {
 
     @Column(nullable = true, length = 100)
     @NotEmpty
+    @Size(min = 2, message = "First Name should have at lest 2 characters")
     private String firstName;
 
     @Column(nullable = true, length = 100)
     @NotEmpty
+    @Size(min = 2, message = "Last Name should have at lest 2 characters")
     private String lastName;
 
     @Column(nullable = true, length = 100)

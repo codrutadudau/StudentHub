@@ -32,7 +32,6 @@ public class UserController {
     @GetMapping("/users/{id}")
     public User findUserById(@PathVariable Integer id) {
         Optional<User> user = Optional.ofNullable(userRepository.findUserById(id));
-        System.out.println(new ResourceNotFoundException("User with id: " + id + " not found"));
         return user
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found"));
     }
@@ -44,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Integer id){
+    public ResponseEntity<Object> updateUser(@Valid @RequestBody User user, @PathVariable Integer id){
         Optional<User> userOptional = Optional.ofNullable(userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found")));
         if(!userOptional.isPresent())

@@ -4,14 +4,17 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 
 public class User {
+
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = true, length = 100)
@@ -38,6 +41,14 @@ public class User {
     @NotEmpty
     @Size(min = 10, max = 15, message = "Phone Number should not be less than 10 characters")
     private String phoneNumber;
+
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles;
 
     public void setFirstName(String firstName) { this.firstName = firstName; }
 

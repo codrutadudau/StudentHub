@@ -7,29 +7,40 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "role_privileges")
+@Table(name = "privilege")
 public class Privilege {
     @Id
-    @Column(name = "privilege_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = true)
-    private String privilegeName;
+    private String name;
 
     @ManyToMany(mappedBy = "privileges")
     private Collection<Role> roles;
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public Privilege(String name){
+        this.name = name;
+    }
 
     public int getId() {
         return id;
     }
 
     public String getName() {
-        return privilegeName;
+        return name;
     }
 
-    public void setPrivilegeName(String privilegeName) {
-        this.privilegeName = privilegeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(int id) {

@@ -8,12 +8,11 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 
 public class User {
 
     @Id
-    @Column(name = "user_id")
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -38,17 +37,27 @@ public class User {
     private String password;
 
     @Column(nullable = true, length = 15)
-    @NotEmpty
     @Size(min = 10, max = 15, message = "Phone Number should not be less than 10 characters")
     private String phoneNumber;
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
+    @Column(nullable = true)
+    private boolean enabled;
+
+    @ManyToMany
     @JoinTable(
             name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Collection<Role> roles;
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
 
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
@@ -88,5 +97,12 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

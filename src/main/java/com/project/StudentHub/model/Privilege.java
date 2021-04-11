@@ -13,26 +13,28 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = true)
+    @Column
     private String name;
 
     @ManyToMany(mappedBy = "privileges")
     private Collection<Role> roles;
 
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Collection<Role> getRoles() {
-        return roles;
-    }
+    public Privilege(){}
 
     public Privilege(String name){
         this.name = name;
     }
 
+    public void setRoles(Collection<Role> roles) { this.roles = roles; }
+
+    public Collection<Role> getRoles() { return roles; }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -41,9 +43,5 @@ public class Privilege {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

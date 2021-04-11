@@ -42,15 +42,17 @@ public class RolePrivilegeSetupDataLoader implements ApplicationListener<Context
         createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
         createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
 
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-        User user = new User();
-        user.setFirstName("Admin");
-        user.setLastName("Admin");
-        user.setPassword("admin1234");
-        user.setEmail("admin@admin.com");
-        user.setRoles(Arrays.asList(adminRole));
-        user.setEnabled(true);
-        userRepository.save(user);
+        if (null == userRepository.findByEmail("admin@admin.com")) {
+            Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+            User user = new User();
+            user.setFirstName("Admin");
+            user.setLastName("Admin");
+            user.setPassword("admin1234");
+            user.setEmail("admin@admin.com");
+            user.setRoles(Arrays.asList(adminRole));
+            user.setEnabled(true);
+            userRepository.save(user);
+        }
 
         alreadySetup = true;
 

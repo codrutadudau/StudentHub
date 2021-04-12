@@ -14,11 +14,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
@@ -71,20 +72,20 @@ public class CustomUserDetailService implements UserDetailsService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public User registerNewUserAccount(UserDto accountDto) throws EmailExistsException {
-
-        if (emailExist(accountDto.getEmail())) {
-            throw new EmailExistsException
-                    ("There is an account with that email adress: " + accountDto.getEmail());
-        }
-        User user = new User();
-
-        user.setFirstName(accountDto.getFirstName());
-        user.setLastName(accountDto.getLastName());
-        user.setPassword(accountDto.getPassword());
-        user.setEmail(accountDto.getEmail());
-
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-        return userRepository.save(user);
-    }
+//    public User registerNewUserAccount(UserDto accountDto) throws EmailExistsException {
+//
+//        if (emailExist(accountDto.getEmail())) {
+//            throw new EmailExistsException
+//                    ("There is an account with that email adress: " + accountDto.getEmail());
+//        }
+//        User user = new User();
+//
+//        user.setFirstName(accountDto.getFirstName());
+//        user.setLastName(accountDto.getLastName());
+//        user.setPassword(accountDto.getPassword());
+//        user.setEmail(accountDto.getEmail());
+//
+//        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+//        return userRepository.save(user);
+//    }
 }

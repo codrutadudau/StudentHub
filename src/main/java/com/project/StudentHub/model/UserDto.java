@@ -4,8 +4,14 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
     private String phoneNumber;
+
+    public UserDto(User user) {
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+    }
 
     public String getFirstName() {
         return firstName;
@@ -17,10 +23,6 @@ public class UserDto {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getPhoneNumber() {
@@ -37,10 +39,6 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setPhoneNumber(String phoneNumber) {

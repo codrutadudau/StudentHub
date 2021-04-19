@@ -1,7 +1,7 @@
 package com.project.StudentHub.filter;
 
 import com.project.StudentHub.services.CustomUserDetailService;
-import com.project.StudentHub.services.util.JwtUtil;
+import com.project.StudentHub.services.util.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private TokenProvider tokenProvider;
 
     @Autowired
     private CustomUserDetailService customUserDetailService;
@@ -32,12 +32,12 @@ public class JwtFilter extends OncePerRequestFilter {
         String email = null;
         if(authHeader != null && authHeader.startsWith("Bearer ")){
             token = authHeader.substring(7);
-            email = jwtUtil.extractEmail(token);
+            email = tokenProvider.extractEmail(token);
         }
 
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customUserDetailService.loadUserByUsername(email);
-            if(jwtUtil.validateToken(token, userDetails)){
+            if(tokenProvider.validateToken(token, userDetails)){
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));

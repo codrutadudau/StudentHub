@@ -3,7 +3,7 @@ package com.project.StudentHub.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -34,9 +34,6 @@ public class User implements Serializable {
     @Email(message = "Email should be valid")
     private String email;
 
-    @Column(length = 50)
-    @NotEmpty
-    @Size(min = 8, max = 15, message = "Password should be between 8 and 15 characters")
     private String password;
 
     @Column(length = 15)

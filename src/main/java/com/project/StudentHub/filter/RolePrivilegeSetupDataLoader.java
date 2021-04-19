@@ -9,6 +9,7 @@ import com.project.StudentHub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -19,6 +20,8 @@ import java.util.List;
 @Component
 public class RolePrivilegeSetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
+    private boolean alreadySetup = false;
+
     @Autowired
     private PrivilegeRepository privilegeRepository;
 
@@ -28,27 +31,37 @@ public class RolePrivilegeSetupDataLoader implements ApplicationListener<Context
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        if(alreadySetup){
+            return;
+        }
+
         Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
         Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
 
         List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
         createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
         createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
-//
-//        if (null == userRepository.findByEmail("admin@admin.com")) {
-//            Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-//            User user = new User();
-//            user.setFirstName("Admin");
-//            user.setLastName("Admin");
-//            user.setPassword("admin1234");
-//            user.setEmail("admin@admin.com");
-//            user.setRoles(Arrays.asList(adminRole));
-//            user.setEnabled(true);
-//            userRepository.save(user);
-//        }
+
+        if (null == userRepository.findByEmail("admin@admin.com")) {
+            Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+            User user = new User();
+            user.setFirstName("Admin");
+            user.setLastName("Admin");
+            user.setPassword(passwordEncoder.encode("admin1234"));
+            user.setEmail("admin@admin.com");
+            user.setPhoneNumber("0712345678");
+            user.setRoles(Arrays.asList(adminRole));
+            user.setEnabled(true);
+            userRepository.save(user);
+
+            alreadySetup = true;
+        }
     }
 
     @Transactional

@@ -1,9 +1,7 @@
 package com.project.StudentHub.services;
 
-import com.project.StudentHub.exception.EmailExistsException;
 import com.project.StudentHub.model.Privilege;
 import com.project.StudentHub.model.Role;
-import com.project.StudentHub.model.UserDto;
 import com.project.StudentHub.repository.RoleRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.model.User;
@@ -67,25 +65,4 @@ public class CustomUserDetailService implements UserDetailsService {
         }
         return authorities;
     }
-
-    private boolean emailExist(String email) {
-        return userRepository.findByEmail(email) != null;
-    }
-
-//    public User registerNewUserAccount(UserDto accountDto) throws EmailExistsException {
-//
-//        if (emailExist(accountDto.getEmail())) {
-//            throw new EmailExistsException
-//                    ("There is an account with that email adress: " + accountDto.getEmail());
-//        }
-//        User user = new User();
-//
-//        user.setFirstName(accountDto.getFirstName());
-//        user.setLastName(accountDto.getLastName());
-//        user.setPassword(accountDto.getPassword());
-//        user.setEmail(accountDto.getEmail());
-//
-//        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-//        return userRepository.save(user);
-//    }
 }

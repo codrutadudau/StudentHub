@@ -8,11 +8,13 @@ import com.project.StudentHub.repository.RoleRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.services.util.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 
@@ -43,9 +45,8 @@ public class AuthenticationController {
     public String loginUser(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-
-        }catch (Exception e){
-            throw new Exception("Invalid email or password! Please try again!");
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
         }
         return tokenProvider.generateToken(authenticationRequest.getEmail());
     }

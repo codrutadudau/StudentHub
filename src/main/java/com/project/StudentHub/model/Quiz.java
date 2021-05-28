@@ -1,11 +1,15 @@
 package com.project.StudentHub.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.Date;
 
 @Data
 @Entity
@@ -24,20 +28,17 @@ public class Quiz {
     private String quizIntro;
 
     @Column
-    @NotEmpty
-    @Temporal(TemporalType.TIME)
-    private Date timeOpen;
+    private LocalDateTime timeOpen;
 
     @Column
-    @NotEmpty
-    @Temporal(TemporalType.TIME)
-    private Date timeClose;
+    private LocalDateTime timeClose;
 
     @Column
     @NotEmpty
     private String password;
 
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
             name = "quizzes_questions",
             joinColumns = @JoinColumn(name = "quiz_id", referencedColumnName = "id"),
@@ -46,11 +47,11 @@ public class Quiz {
 
     private Collection<Question> questions;
 
-    public Collection<Question> getQuestion() {
+    public Collection<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestion(Collection<Question> question) {
+    public void setQuestions(Collection<Question> question) {
         this.questions = question;
     }
 
@@ -66,11 +67,11 @@ public class Quiz {
         return quizIntro;
     }
 
-    public Date getTimeOpen() {
+    public LocalDateTime getTimeOpen() {
         return timeOpen;
     }
 
-    public Date getTimeClose() {
+    public LocalDateTime getTimeClose() {
         return timeClose;
     }
 
@@ -90,11 +91,11 @@ public class Quiz {
         this.quizIntro = quizIntro;
     }
 
-    public void setTimeOpen(Date timeOpen) {
+    public void setTimeOpen(LocalDateTime timeOpen) {
         this.timeOpen = timeOpen;
     }
 
-    public void setTimeClose(Date timeClose) {
+    public void setTimeClose(LocalDateTime timeClose) {
         this.timeClose = timeClose;
     }
 

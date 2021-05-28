@@ -20,18 +20,17 @@ public class Question {
     private String description;
 
     @Column(length = 100)
-    @NotEmpty
     private int defaultGrade;
 
     @Column
-    @NotEmpty
     private boolean hasMultipleAnswers;
 
     @ManyToMany(mappedBy = "questions")
     @JsonIgnore
     private Collection<Quiz> quizzes;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "question")
+    @JsonIgnore
     private Collection<Answer> answers;
 
     public Collection<Quiz> getQuizzes() {

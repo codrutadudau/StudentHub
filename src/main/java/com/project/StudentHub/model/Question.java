@@ -31,8 +31,19 @@ public class Question {
     @JsonIgnore
     private Collection<Quiz> quizzes;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    private Collection<Answer> answers;
+
     public Collection<Quiz> getQuizzes() {
         return quizzes;
+    }
+
+    public Collection<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Collection<Answer> answers) {
+        this.answers = answers;
     }
 
     public void setQuizzes(Collection<Quiz> quizzes) {

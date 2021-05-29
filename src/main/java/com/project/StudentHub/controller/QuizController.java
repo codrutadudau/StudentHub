@@ -1,7 +1,10 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
+import com.project.StudentHub.model.Question;
+import com.project.StudentHub.model.QuestionDto;
 import com.project.StudentHub.model.Quiz;
+import com.project.StudentHub.repository.QuestionRepository;
 import com.project.StudentHub.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,18 @@ public class QuizController {
 
     @PostMapping("/quizzes")
     public Quiz addQuiz(@Valid @RequestBody Quiz quiz){
+        return quizRepository.save(quiz);
+    }
+
+    @PostMapping("/quizzes/{id}/question")
+    public Quiz addQuizQuestion(@PathVariable Integer id, @Valid @RequestBody QuestionDto question) {
+        Quiz quiz = quizRepository.findQuizById(id);
+        Question q = new Question();
+        q.setDefaultGrade(question.getDefaultGrade());
+        q.setDescription(question.getDescription());
+        q.setHasMultipleAnswers(question.hasMultipleAnswers());
+        quiz.add(q);
+
         return quizRepository.save(quiz);
     }
 

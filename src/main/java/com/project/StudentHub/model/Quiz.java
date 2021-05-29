@@ -1,15 +1,11 @@
 package com.project.StudentHub.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import lombok.Data;
 
 @Data
 @Entity
@@ -46,14 +42,6 @@ public class Quiz {
     )
 
     private Collection<Question> questions;
-
-    public Collection<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Collection<Question> question) {
-        this.questions = question;
-    }
 
     public int getId() {
         return id;
@@ -101,5 +89,21 @@ public class Quiz {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Collection<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Collection<Question> question) {
+        this.questions = question;
+    }
+
+    public void add(Question question) {
+        this.questions.add(question);
+    }
+
+    public void remove(Question question) {
+        this.questions.remove(question);
     }
 }

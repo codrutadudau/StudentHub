@@ -6,6 +6,7 @@ import com.project.StudentHub.model.User;
 import com.project.StudentHub.model.UserDto;
 import com.project.StudentHub.repository.RoleRepository;
 import com.project.StudentHub.repository.UserRepository;
+import com.project.StudentHub.services.EmailService;
 import com.project.StudentHub.services.util.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
+import javax.xml.bind.ValidationException;
 
 @RestController
 @RequestMapping("/api")
 public class AuthenticationController {
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -52,7 +55,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public User registerUser(@RequestBody UserDto accountDto) throws EmailExistsException {
+    public User registerUser(@RequestBody UserDto accountDto) throws EmailExistsException, ValidationException {
         if (emailExist(accountDto.getEmail())) {
             throw new EmailExistsException
                     ("This email already exists: " + accountDto.getEmail());
@@ -60,7 +63,6 @@ public class AuthenticationController {
         }
 
         User user = new User();
-
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
         user.setEmail(accountDto.getEmail());
@@ -68,6 +70,8 @@ public class AuthenticationController {
         user.setPhoneNumber(accountDto.getPhoneNumber());
 
         user.setRole(roleRepository.findByName("ROLE_USER"));
+
+        emailService.sendEmail(user);
         return userRepository.save(user);
     }
 

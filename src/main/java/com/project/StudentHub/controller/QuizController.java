@@ -4,7 +4,6 @@ import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Question;
 import com.project.StudentHub.model.QuestionDto;
 import com.project.StudentHub.model.Quiz;
-import com.project.StudentHub.repository.QuestionRepository;
 import com.project.StudentHub.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

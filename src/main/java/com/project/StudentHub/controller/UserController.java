@@ -3,12 +3,15 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.model.User;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Base64;
 import java.util.Optional;
 
 @RestController
@@ -51,5 +54,18 @@ public class UserController {
         user.setId(id);
         userRepository.save(user);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/users/me")
+    public User getLoggedUser(@RequestHeader HttpHeaders headers){
+        String token = headers.getFirst(HttpHeaders.AUTHORIZATION).substring(7);
+        String[] tokenChunks = token.split("\\.");
+
+        Base64.Decoder decoder = Base64.getDecoder();
+        String payload = new String(decoder.decode(tokenChunks[1]));
+
+        JSONObject jsonPayload = new JSONObject(payload);
+
+        return userRepository.findByEmail(jsonPayload.getString("sub"));
     }
 }

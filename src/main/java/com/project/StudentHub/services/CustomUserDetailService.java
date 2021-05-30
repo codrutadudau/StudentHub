@@ -32,29 +32,28 @@ public class CustomUserDetailService implements UserDetailsService {
         if (user == null) {
             return new org.springframework.security.core.userdetails.User(
                     " ", " ", true, true, true, true,
-                    getAuthorities(Arrays.asList(roleRepository.findByName("ROLE_USER"))));
+                    getAuthorities(roleRepository.findByName("ROLE_USER")));
         }
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), user.isEnabled(), true, true,
-                true, getAuthorities(user.getRoles()));
+                true, getAuthorities(user.getRole()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(
-            Collection<Role> roles) {
-
-        return getGrantedAuthorities(getPrivileges(roles));
+    private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
+        return getGrantedAuthorities(getPrivileges(role));
     }
 
-    private List<String> getPrivileges(Collection<Role> roles) {
+    private List<String> getPrivileges(Role role) {
 
         List<String> privileges = new ArrayList<>();
-        List<Privilege> collection = new ArrayList<>();
-        for (Role role : roles) {
-            collection.addAll(role.getPrivileges());
-        }
+
+        List<Privilege> collection = new ArrayList<>(role.getPrivileges());
+
         for (Privilege item : collection) {
             privileges.add(item.getName());
         }
+
         return privileges;
     }
 
@@ -63,6 +62,7 @@ public class CustomUserDetailService implements UserDetailsService {
         for (String privilege : privileges) {
             authorities.add(new SimpleGrantedAuthority(privilege));
         }
+
         return authorities;
     }
 }

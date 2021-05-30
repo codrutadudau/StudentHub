@@ -1,7 +1,5 @@
 package com.project.StudentHub.model;
 
-import javax.persistence.Column;
-
 public class QuestionDto {
     private String description;
 

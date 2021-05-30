@@ -1,7 +1,9 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
+import com.project.StudentHub.model.Answer;
 import com.project.StudentHub.model.Question;
+import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +20,9 @@ import java.util.Optional;
 public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @PostMapping("/questions")
     public Question addQuestion(@Valid @RequestBody Question question){
@@ -29,11 +35,18 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public Question findQuestionById(@PathVariable Integer id) {
+    public Question findQuestionById(@RequestParam Integer id) {
         Optional<Question> question = Optional.ofNullable(questionRepository.findQuestionById(id));
         return question
                 .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found"));
     }
+
+    @GetMapping("/questions/{id}/answers")
+    public Collection<Answer> findAnswers(@PathVariable Integer id){
+        Question question = questionRepository.findQuestionById(id);
+        return question.getAnswers();
+    }
+
     @DeleteMapping("/questions/{id}")
     public void deleteQuestion(@PathVariable Integer id){
         Question questionDelete= questionRepository.findById(id)

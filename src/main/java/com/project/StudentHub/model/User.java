@@ -44,20 +44,15 @@ public class User implements Serializable {
     @Column
     private boolean enabled;
 
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
-    )
-    private Collection<Role> roles;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Collection<Role> roles) { this.roles = roles; }
+    public void setRole(Role role) { this.role = role; }
 
     public int  getId() {
         return id;

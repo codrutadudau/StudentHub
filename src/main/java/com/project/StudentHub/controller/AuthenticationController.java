@@ -67,7 +67,7 @@ public class AuthenticationController {
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setPhoneNumber(accountDto.getPhoneNumber());
 
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        user.setRole(roleRepository.findByName("ROLE_USER"));
         return userRepository.save(user);
     }
 

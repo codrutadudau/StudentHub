@@ -22,11 +22,12 @@ public class Role implements Serializable {
     @Column(length = 10)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "role")
     @JsonIgnore
     private Collection<User> users;
 
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
             name = "roles_privileges",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),

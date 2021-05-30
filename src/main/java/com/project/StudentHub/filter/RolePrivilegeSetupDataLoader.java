@@ -56,7 +56,7 @@ public class RolePrivilegeSetupDataLoader implements ApplicationListener<Context
             user.setPassword(passwordEncoder.encode("admin1234"));
             user.setEmail("admin@admin.com");
             user.setPhoneNumber("0712345678");
-            user.setRoles(Arrays.asList(adminRole));
+            user.setRole(adminRole);
             user.setEnabled(true);
             userRepository.save(user);
 

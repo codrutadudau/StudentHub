@@ -51,7 +51,10 @@ public class AuthenticationController {
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
         }
-        return tokenProvider.generateToken(authenticationRequest.getEmail());
+
+        String roleName = userRepository.findByEmail(authenticationRequest.getEmail()).getRole().getName();
+
+        return tokenProvider.generateToken(authenticationRequest.getEmail(), roleName);
     }
 
     @PostMapping("/signup")

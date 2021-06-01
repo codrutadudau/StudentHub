@@ -36,8 +36,10 @@ public class TokenProvider {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String email) throws UnsupportedEncodingException {
+    public String generateToken(String email, String roleName) throws UnsupportedEncodingException {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", roleName);
+
         return createToken(claims, email);
     }
 

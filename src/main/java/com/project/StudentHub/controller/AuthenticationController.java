@@ -46,15 +46,22 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public String loginUser(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+        User user = userRepository.findByEmail(authenticationRequest.getEmail());
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user does not exist");
+        }
+
+        if (!user.isEnabled()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Email not validated");
+        }
+
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
         }
 
-        String roleName = userRepository.findByEmail(authenticationRequest.getEmail()).getRole().getName();
-
-        return tokenProvider.generateToken(authenticationRequest.getEmail(), roleName);
+        return tokenProvider.generateToken(authenticationRequest.getEmail(), user.getRole().getName());
     }
 
     @PostMapping("/signup")

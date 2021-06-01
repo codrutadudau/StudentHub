@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Optional;
 
 @RestController
@@ -48,6 +49,7 @@ public class QuizController {
         return quiz
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz with id: " + id + " not found"));
     }
+
     @DeleteMapping("/quizzes/{id}")
     public void deleteQuiz(@PathVariable Integer id){
         Quiz quizDelete= quizRepository.findById(id)

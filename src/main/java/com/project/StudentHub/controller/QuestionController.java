@@ -3,8 +3,10 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Answer;
 import com.project.StudentHub.model.Question;
+import com.project.StudentHub.model.Quiz;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.QuestionRepository;
+import com.project.StudentHub.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,9 @@ public class QuestionController {
 
     @Autowired
     private AnswerRepository answerRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
 
     @PostMapping("/questions")
     public Question addQuestion(@Valid @RequestBody Question question){
@@ -45,6 +50,12 @@ public class QuestionController {
     public Collection<Answer> findAnswers(@PathVariable Integer id){
         Question question = questionRepository.findQuestionById(id);
         return question.getAnswers();
+    }
+
+    @GetMapping("/questions/quiz/{id}")
+    public Collection<Question> getQuestionsByQuiz(@PathVariable Integer id){
+        Quiz quiz = quizRepository.findQuizById(id);
+        return quiz.getQuestions();
     }
 
     @DeleteMapping("/questions/{id}")

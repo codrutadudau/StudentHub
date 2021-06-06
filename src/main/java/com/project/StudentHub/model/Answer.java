@@ -18,7 +18,7 @@ public class Answer {
     @NotEmpty
     private String description;
 
-    @Column(columnDefinition = "boolean default null")
+    @Column(columnDefinition = "boolean default 0")
     private boolean correct;
 
     @ManyToOne(fetch = FetchType.LAZY)

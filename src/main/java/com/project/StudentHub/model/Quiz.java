@@ -15,11 +15,11 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 100)
+    @Column(columnDefinition = "varchar(255) default null")
     @NotEmpty
     private String name;
 
-    @Column(length = 200)
+    @Column(columnDefinition = "text default null")
     @NotEmpty
     private String quizIntro;
 

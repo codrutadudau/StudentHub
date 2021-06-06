@@ -13,8 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -53,14 +52,25 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/quiz/{id}")
-    public Collection<Question> getQuestionsByQuiz(@PathVariable Integer id){
+    public ArrayList<Object> getQuestionsByQuiz(@PathVariable Integer id) {
+        ArrayList<Object> response = new ArrayList<>();
         Quiz quiz = quizRepository.findQuizById(id);
-        return quiz.getQuestions();
+        Collection<Question> questions = quiz.getQuestions();
+
+        for (Question q : questions) {
+            HashMap<Object, Object> questionAnswers = new HashMap<Object, Object>();
+            Collection<Answer> answers = q.getAnswers();
+            questionAnswers.put("question", q);
+            questionAnswers.put("answers", answers);
+            response.add(questionAnswers);
+        }
+
+        return response;
     }
 
     @DeleteMapping("/questions/{id}")
     public void deleteQuestion(@PathVariable Integer id){
-        Question questionDelete= questionRepository.findById(id)
+        Question questionDelete = questionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found"));
         questionRepository.delete(questionDelete);
     }

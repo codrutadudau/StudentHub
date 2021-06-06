@@ -8,6 +8,7 @@ import com.project.StudentHub.repository.RoleRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.services.EmailService;
 import com.project.StudentHub.services.util.TokenProvider;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.ValidationException;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api")
@@ -67,9 +69,9 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public User registerUser(@RequestBody UserDto accountDto) throws EmailExistsException, ValidationException {
         if (emailExist(accountDto.getEmail())) {
-            throw new EmailExistsException
-                    ("This email already exists: " + accountDto.getEmail());
-
+            JSONObject error = new JSONObject();
+            error.put("email", "This email already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, error.toString());
         }
 
         User user = new User();

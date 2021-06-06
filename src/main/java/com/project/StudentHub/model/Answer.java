@@ -14,9 +14,12 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "varchar(255) default null")
     @NotEmpty
     private String description;
+
+    @Column(columnDefinition = "boolean default null")
+    private boolean correct;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
@@ -45,5 +48,13 @@ public class Answer {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
 }

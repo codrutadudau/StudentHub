@@ -2,7 +2,6 @@ package com.project.StudentHub.services;
 
 import com.project.StudentHub.configuration.email.EmailConfiguration;
 import com.project.StudentHub.model.User;
-import com.project.StudentHub.model.UserDto;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;

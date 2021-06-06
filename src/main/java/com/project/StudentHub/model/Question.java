@@ -15,14 +15,14 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "varchar(255) default null")
     @NotEmpty
     private String description;
 
-    @Column(length = 100)
+    @Column(columnDefinition = "integer default 0")
     private int defaultGrade;
 
-    @Column
+    @Column(columnDefinition = "boolean default false")
     private boolean hasMultipleAnswers;
 
     @ManyToMany(mappedBy = "questions")

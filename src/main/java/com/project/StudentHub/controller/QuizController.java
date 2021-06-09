@@ -4,6 +4,7 @@ import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Question;
 import com.project.StudentHub.model.QuestionDto;
 import com.project.StudentHub.model.Quiz;
+import com.project.StudentHub.repository.QuestionRepository;
 import com.project.StudentHub.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class QuizController {
     @Autowired
     private QuizRepository quizRepository;
 
+    @Autowired
+    private QuestionRepository questionRepository;
+
     @PostMapping("/quizzes")
     public Quiz addQuiz(@Valid @RequestBody Quiz quiz){
         return quizRepository.save(quiz);
@@ -36,6 +40,15 @@ public class QuizController {
         quiz.add(q);
 
         return quizRepository.save(quiz);
+    }
+
+    @DeleteMapping("/quizzes/{id}/question/{questionId}")
+    public void deleteQuizQuestion(@PathVariable Integer id, @PathVariable Integer questionId) {
+        Quiz quiz = quizRepository.findQuizById(id);
+        Question question = questionRepository.findQuestionById(questionId);
+        quiz.remove(question);
+
+        quizRepository.save(quiz);
     }
 
     @GetMapping("/quizzes")

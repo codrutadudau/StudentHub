@@ -1,6 +1,7 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
+import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.model.User;
 import org.json.JSONObject;
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user){

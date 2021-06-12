@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -25,6 +26,10 @@ public class Answer {
     @JoinColumn(name = "question_id")
     @JsonIgnore
     private Question question;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "answer")
+    @JsonIgnore
+    private Collection<UserOption> userOptions;
 
     public Question getQuestion() {
         return question;

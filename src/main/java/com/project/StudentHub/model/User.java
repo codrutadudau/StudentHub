@@ -1,12 +1,14 @@
 package com.project.StudentHub.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -45,6 +47,18 @@ public class User implements Serializable {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Collection<UserOption> userOptions;
+
+    public Collection<UserOption> getUserOptions() {
+        return userOptions;
+    }
+
+    public void setUserOptions(Collection<UserOption> userOptions) {
+        this.userOptions = userOptions;
+    }
 
     public Role getRole() {
         return role;

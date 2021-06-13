@@ -40,13 +40,13 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public Question findQuestionById(@RequestParam Integer id) {
+    public Question findQuestionById(@PathVariable Integer id) {
         Optional<Question> question = Optional.ofNullable(questionRepository.findQuestionById(id));
         return question
                 .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found"));
     }
 
-    @GetMapping("/questions/{id}/answers")
+    @GetMapping("/questions/answers/{id}")
     public Collection<Answer> findAnswers(@PathVariable Integer id){
         Question question = questionRepository.findQuestionById(id);
         return question.getAnswers();
@@ -69,7 +69,7 @@ public class QuestionController {
         return response;
     }
 
-    @PostMapping("/questions/{id}/answers")
+    @PostMapping("/questions/answers/{id}")
     public Question addQuestionAnswers(@PathVariable Integer id, @Valid @RequestBody QuestionAnswersDto questionAnswers) {
         Question question = questionRepository.findQuestionById(id);
 
@@ -95,6 +95,13 @@ public class QuestionController {
         }
 
         return questionRepository.save(question);
+    }
+
+    @GetMapping("/questions/{id}/answers")
+    public Collection<Answer> getAnswersByQuestionId(@PathVariable Integer id) {
+        Question question = questionRepository.findQuestionById(id);
+
+        return question.getAnswers();
     }
 
     @DeleteMapping("/questions/{id}")

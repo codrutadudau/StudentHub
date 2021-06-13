@@ -2,7 +2,10 @@ package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Answer;
+import com.project.StudentHub.model.AnswerDto;
 import com.project.StudentHub.repository.AnswerRepository;
+import com.project.StudentHub.repository.QuestionRepository;
+import com.project.StudentHub.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,8 +21,16 @@ public class AnswerController {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private QuestionRepository questionRepository;
+
     @PostMapping("/answers")
-    public Answer addAnswer(@Valid @RequestBody Answer answer){
+    public Answer addAnswer(@Valid @RequestBody AnswerDto answerDto){
+        Answer answer = new Answer();
+        answer.setDescription(answerDto.getDescription());
+        answer.setCorrect(answerDto.isCorrect());
+        answer.setQuestion(questionRepository.findQuestionById(answerDto.getQuestion()));
+
         return answerRepository.save(answer);
     }
 
@@ -42,13 +53,17 @@ public class AnswerController {
     }
 
     @PutMapping("/answers/{id}")
-    public ResponseEntity<Object> updateAnswer(@Valid @RequestBody Answer answer, @PathVariable Integer id){
+    public ResponseEntity<Object> updateAnswer(@Valid @RequestBody AnswerDto answerDto, @PathVariable Integer id){
         Optional<Answer> answerOptional = Optional.ofNullable(answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Answer with id: " + id + " not found")));
         if(!answerOptional.isPresent())
             return ResponseEntity.notFound().build();
-        answer.setId(id);
+
+        Answer answer = answerRepository.findAnswerById(id);
+        answer.setCorrect(answerDto.isCorrect());
+        answer.setDescription(answerDto.getDescription());
         answerRepository.save(answer);
+
         return ResponseEntity.noContent().build();
     }
 }

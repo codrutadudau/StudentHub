@@ -3,6 +3,7 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Answer;
 import com.project.StudentHub.model.Question;
+import com.project.StudentHub.model.QuestionAnswersDto;
 import com.project.StudentHub.model.Quiz;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.QuestionRepository;
@@ -66,6 +67,34 @@ public class QuestionController {
         }
 
         return response;
+    }
+
+    @PostMapping("/questions/{id}/answers")
+    public Question addQuestionAnswers(@PathVariable Integer id, @Valid @RequestBody QuestionAnswersDto questionAnswers) {
+        Question question = questionRepository.findQuestionById(id);
+
+        Object answers = questionAnswers.getAnswers();
+        Object correctAnswers = questionAnswers.getCorrectAnswers();
+
+        Map<String, String> answersArray = (Map<String, String>) answers;
+        Map<String, String> correctAnswersArray = (Map<String, String>) correctAnswers;
+        for (String answerKey : answersArray.keySet()) {
+            if (!answersArray.get(answerKey).equals("")) {
+                Answer a = new Answer();
+                a.setQuestion(question);
+                a.setDescription(answersArray.get(answerKey));
+                a.setCorrect(false);
+                for (String correctAnswerKey : correctAnswersArray.keySet()) {
+                    if (answerKey.equals(correctAnswersArray.get(correctAnswerKey))) {
+                        a.setCorrect(true);
+                    }
+                }
+
+                answerRepository.save(a);
+            }
+        }
+
+        return questionRepository.save(question);
     }
 
     @DeleteMapping("/questions/{id}")

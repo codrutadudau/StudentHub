@@ -19,7 +19,7 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 10)
+    @Column(length = 50)
     private String name;
 
     @OneToMany(mappedBy = "role")

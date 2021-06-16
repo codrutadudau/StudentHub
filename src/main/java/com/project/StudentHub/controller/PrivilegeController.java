@@ -2,7 +2,6 @@ package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Privilege;
-import com.project.StudentHub.model.Question;
 import com.project.StudentHub.repository.PrivilegeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +28,24 @@ public class PrivilegeController {
         return privilegeRepository.findAll();
     }
 
+    @GetMapping("/privileges/{id}")
+    public Privilege findPrivilegeById(@PathVariable Integer id) {
+        Optional<Privilege> privilege = Optional.ofNullable(privilegeRepository.findPrivilegeById(id));
+        return privilege
+                .orElseThrow(() -> new ResourceNotFoundException("Privilege with id: " + id + " not found"));
+    }
+
     @DeleteMapping("/privileges/{id}")
     public void deleteQuestion(@PathVariable Integer id){
-        Privilege questionDelete = Optional.ofNullable(privilegeRepository.findPrivilegeById(id))
+        Privilege privilege = Optional.ofNullable(privilegeRepository.findPrivilegeById(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Privilege with id: " + id + " not found"));
-        privilegeRepository.delete(questionDelete);
+        privilegeRepository.delete(privilege);
     }
 
     @PutMapping("/privileges/{id}")
     public ResponseEntity<Object> updatePrivilege(@Valid @RequestBody Privilege privilege, @PathVariable Integer id){
         Optional<Privilege> privilegeOptional = Optional.ofNullable(Optional.ofNullable(privilegeRepository.findPrivilegeById(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Privilege with id: " + id + " not found")));
         if(!privilegeOptional.isPresent())
             return ResponseEntity.notFound().build();
         privilege.setId(id);

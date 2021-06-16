@@ -33,6 +33,10 @@ public class Quiz {
     @NotEmpty
     private String password;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
+    @JsonIgnore
+    private Collection<QuizInstance> quizInstances;
+
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(
@@ -105,5 +109,13 @@ public class Quiz {
 
     public void remove(Question question) {
         this.questions.remove(question);
+    }
+
+    public Collection<QuizInstance> getQuizInstances() {
+        return quizInstances;
+    }
+
+    public void setQuizInstances(Collection<QuizInstance> quizInstances) {
+        this.quizInstances = quizInstances;
     }
 }

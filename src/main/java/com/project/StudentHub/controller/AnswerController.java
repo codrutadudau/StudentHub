@@ -47,7 +47,7 @@ public class AnswerController {
     }
     @DeleteMapping("/answers/{id}")
     public void deleteAnswer(@PathVariable Integer id){
-        Answer answerDelete= answerRepository.findById(id)
+        Answer answerDelete = answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Answer with id: " + id + " not found"));
         answerRepository.delete(answerDelete);
     }

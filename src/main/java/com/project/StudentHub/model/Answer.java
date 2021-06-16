@@ -29,7 +29,7 @@ public class Answer {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "answer")
     @JsonIgnore
-    private Collection<UserOption> userOptions;
+    private Collection<AnswerOption> answerOptions;
 
     public Question getQuestion() {
         return question;

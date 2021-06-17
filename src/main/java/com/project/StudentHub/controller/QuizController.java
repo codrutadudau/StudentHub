@@ -2,7 +2,7 @@ package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Question;
-import com.project.StudentHub.model.QuestionDto;
+import com.project.StudentHub.dto.QuestionDto;
 import com.project.StudentHub.model.Quiz;
 import com.project.StudentHub.repository.QuestionRepository;
 import com.project.StudentHub.repository.QuizRepository;
@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.Optional;
 
 @RestController

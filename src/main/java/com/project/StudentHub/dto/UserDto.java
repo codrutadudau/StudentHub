@@ -1,4 +1,4 @@
-package com.project.StudentHub.model;
+package com.project.StudentHub.dto;
 
 public class UserDto {
 

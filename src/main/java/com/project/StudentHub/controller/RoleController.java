@@ -1,7 +1,6 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
-import com.project.StudentHub.model.Privilege;
 import com.project.StudentHub.model.Role;
 import com.project.StudentHub.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

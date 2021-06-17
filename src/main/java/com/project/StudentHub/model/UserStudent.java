@@ -1,6 +1,5 @@
 package com.project.StudentHub.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,21 +16,45 @@ public class UserStudent {
 
     @Column(length = 16, unique = true)
     @NotEmpty
-    private String studentIdentificationNumber;
+    private String identificationNumber;
 
     @OneToOne
-    @JsonIgnore
     @JoinColumn(name="classroom_id")
     private Classroom classroom;
 
     @OneToOne
-    @JsonIgnore
     @JoinColumn(name="user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStudent")
-    @JsonIgnore
     private Collection<QuizInstance> quizInstances;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStudent")
+    private Collection<AnswerOption> answerOptions;
+
+    public Collection<AnswerOption> getAnswerOptions() {
+        return answerOptions;
+    }
+
+    public void setAnswerOptions(Collection<AnswerOption> answerOptions) {
+        this.answerOptions = answerOptions;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
 
     public Classroom getClassroom() {
         return classroom;
@@ -55,21 +78,5 @@ public class UserStudent {
 
     public void setQuizInstances(Collection<QuizInstance> quizInstances) {
         this.quizInstances = quizInstances;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStudentIdentificationNumber() {
-        return studentIdentificationNumber;
-    }
-
-    public void setStudentIdentificationNumber(String studentIdentificationNumber) {
-        this.studentIdentificationNumber = studentIdentificationNumber;
     }
 }

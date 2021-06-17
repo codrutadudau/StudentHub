@@ -2,10 +2,9 @@ package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Answer;
-import com.project.StudentHub.model.AnswerDto;
+import com.project.StudentHub.dto.AnswerDto;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.QuestionRepository;
-import com.project.StudentHub.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

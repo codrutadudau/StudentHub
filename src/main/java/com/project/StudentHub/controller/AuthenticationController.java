@@ -3,7 +3,7 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.exception.EmailExistsException;
 import com.project.StudentHub.model.AuthenticationRequest;
 import com.project.StudentHub.model.User;
-import com.project.StudentHub.model.UserDto;
+import com.project.StudentHub.dto.UserDto;
 import com.project.StudentHub.repository.RoleRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.services.EmailService;

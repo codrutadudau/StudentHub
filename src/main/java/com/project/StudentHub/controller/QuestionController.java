@@ -3,7 +3,7 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Answer;
 import com.project.StudentHub.model.Question;
-import com.project.StudentHub.model.QuestionAnswersDto;
+import com.project.StudentHub.dto.QuestionAnswersDto;
 import com.project.StudentHub.model.Quiz;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.QuestionRepository;

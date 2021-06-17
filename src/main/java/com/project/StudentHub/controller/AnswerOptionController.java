@@ -1,10 +1,11 @@
 package com.project.StudentHub.controller;
 
+import com.project.StudentHub.dto.AnswerOptionDto;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.*;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.AnswerOptionRepository;
-import com.project.StudentHub.repository.UserRepository;
+import com.project.StudentHub.repository.UserStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @Validated
 public class AnswerOptionController {
     @Autowired
-    private UserRepository userRepository;
+    private UserStudentRepository userStudentRepository;
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -28,7 +29,7 @@ public class AnswerOptionController {
     @PostMapping("/answer_options")
     public AnswerOption addAnswerOption(@Valid @RequestBody AnswerOptionDto answerOption){
         AnswerOption answerOption1 = new AnswerOption();
-        answerOption1.setUser(userRepository.findUserById(answerOption.getUser()));
+        answerOption1.setUserStudent(userStudentRepository.findUserStudentById(answerOption.getUserStudent()));
         answerOption1.setAnswer(answerRepository.findAnswerById(answerOption.getAnswer()));
 
         return answerOptionRepository.save(answerOption1);

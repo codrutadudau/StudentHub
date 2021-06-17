@@ -19,8 +19,7 @@ public class Classroom {
     @NotEmpty
     private String name;
 
-    @Column(length = 1)
-    @NotEmpty
+    @Column(columnDefinition = "integer default 0")
     private int year;
 
     @ManyToMany(mappedBy = "classrooms")

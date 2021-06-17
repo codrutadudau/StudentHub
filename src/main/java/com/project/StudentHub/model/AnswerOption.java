@@ -14,9 +14,9 @@ public class AnswerOption {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_student_id")
     @JsonIgnore
-    private User user;
+    private UserStudent userStudent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "answer_id")
@@ -31,12 +31,12 @@ public class AnswerOption {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public UserStudent getUserStudent() {
+        return userStudent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserStudent(UserStudent userStudent) {
+        this.userStudent = userStudent;
     }
 
     public Answer getAnswer() {

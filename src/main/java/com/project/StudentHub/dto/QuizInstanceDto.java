@@ -1,4 +1,4 @@
-package com.project.StudentHub.model;
+package com.project.StudentHub.dto;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ public class QuizInstanceDto {
 
     private LocalDateTime finishedAt;
 
-    private Integer user;
+    private Integer userStudent;
 
     private Integer quiz;
 
@@ -40,12 +40,12 @@ public class QuizInstanceDto {
         this.finishedAt = finishedAt;
     }
 
-    public Integer getUser() {
-        return user;
+    public Integer getUserStudent() {
+        return userStudent;
     }
 
-    public void setUser(Integer user) {
-        this.user = user;
+    public void setUserStudent(Integer userStudent) {
+        this.userStudent = userStudent;
     }
 
     public Integer getQuiz() {

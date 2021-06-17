@@ -3,7 +3,6 @@ package com.project.StudentHub.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import lombok.Data;
 
@@ -24,19 +23,17 @@ public class QuizInstance {
     @Column
     private LocalDateTime finishedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_student_id")
     @JsonIgnore
     private UserStudent userStudent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "quiz_id")
-    @JsonIgnore
     private Quiz quiz;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "assigned_by")
-    @JsonIgnore
     private UserTeacher assignedBy;
 
     public int getId() {

@@ -18,38 +18,40 @@ public class UserTeacherController {
     @Autowired
     private UserTeacherRepository userTeacherRepository;
 
-    @PostMapping("/users/teachers")
+    @PostMapping("/user_teachers")
     public UserTeacher addTeacher(@Valid @RequestBody UserTeacher userTeacher){
         return userTeacherRepository.save(userTeacher);
     }
 
-    @GetMapping("/users/teachers")
-    public Iterable<UserTeacher> getStudent(){
+    @GetMapping("/user_teachers")
+    public Iterable<UserTeacher> getTeacher(){
         return userTeacherRepository.findAll();
     }
 
-    @GetMapping("/users/teachers/{id}")
+    @GetMapping("/user_teachers/{id}")
     public UserTeacher findTeacherById(@PathVariable Integer id) {
         Optional<UserTeacher> user = Optional.ofNullable(userTeacherRepository.findTeacherById(id));
         return user
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher with id: " + id + " not found"));
     }
 
-    @DeleteMapping("/users/teachers/{id}")
+    @DeleteMapping("/user_teachers/{id}")
     public void deleteTeacher(@PathVariable Integer id){
         UserTeacher userDelete = userTeacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher with id: " + id + " not found"));
         userTeacherRepository.delete(userDelete);
     }
 
-    @PutMapping("/users/teachers/{id}")
+    @PutMapping("/user_teachers/{id}")
     public ResponseEntity<Object> updateTeacher(@Valid @RequestBody UserTeacher userTeacher, @PathVariable Integer id){
         Optional<UserTeacher> userTeacherOptional = Optional.ofNullable(userTeacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student with id: " + id + " not found")));
         if(!userTeacherOptional.isPresent())
             return ResponseEntity.notFound().build();
+
         userTeacher.setId(id);
         userTeacherRepository.save(userTeacher);
+
         return ResponseEntity.noContent().build();
     }
 }

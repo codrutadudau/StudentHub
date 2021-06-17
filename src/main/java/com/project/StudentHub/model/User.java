@@ -52,24 +52,12 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<AnswerOption> answerOptions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
-    private Collection<QuizInstance> quizInstances;
-
     public Collection<AnswerOption> getAnswerOptions() {
         return answerOptions;
     }
 
     public void setAnswerOptions(Collection<AnswerOption> answerOptions) {
         this.answerOptions = answerOptions;
-    }
-
-    public Collection<QuizInstance> getQuizInstances() {
-        return quizInstances;
-    }
-
-    public void setQuizInstances(Collection<QuizInstance> quizInstances) {
-        this.quizInstances = quizInstances;
     }
 
     public Role getRole() {

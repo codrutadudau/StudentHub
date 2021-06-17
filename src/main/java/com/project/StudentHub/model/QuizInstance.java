@@ -3,6 +3,8 @@ package com.project.StudentHub.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 import lombok.Data;
 
 @Data
@@ -23,9 +25,9 @@ public class QuizInstance {
     private LocalDateTime finishedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_student_id")
     @JsonIgnore
-    private User user;
+    private UserStudent userStudent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
@@ -35,7 +37,7 @@ public class QuizInstance {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_by")
     @JsonIgnore
-    private User assignedBy;
+    private UserTeacher assignedBy;
 
     public int getId() {
         return id;
@@ -69,12 +71,12 @@ public class QuizInstance {
         this.finishedAt = finishedAt;
     }
 
-    public User getUser() {
-        return user;
+    public UserStudent getUserStudent() {
+        return userStudent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserStudent(UserStudent userStudent) {
+        this.userStudent = userStudent;
     }
 
     public Quiz getQuiz() {
@@ -85,11 +87,11 @@ public class QuizInstance {
         this.quiz = quiz;
     }
 
-    public User getAssignedBy() {
+    public UserTeacher getAssignedBy() {
         return assignedBy;
     }
 
-    public void setAssignedBy(User assignedBy) {
+    public void setAssignedBy(UserTeacher assignedBy) {
         this.assignedBy = assignedBy;
     }
 }

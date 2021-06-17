@@ -3,9 +3,8 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.QuizInstance;
 import com.project.StudentHub.model.QuizInstanceDto;
-import com.project.StudentHub.repository.QuizInstanceRepository;
-import com.project.StudentHub.repository.QuizRepository;
-import com.project.StudentHub.repository.UserRepository;
+import com.project.StudentHub.model.UserStudent;
+import com.project.StudentHub.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +23,18 @@ public class QuizInstanceController {
     private QuizRepository quizRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserStudentRepository userStudentRepository;
+
+    @Autowired
+    private UserTeacherRepository userTeacherRepository;
 
     @PostMapping("/quiz_instances")
     public QuizInstance addQuizInstance(@Valid @RequestBody QuizInstanceDto quizInstance){
         QuizInstance quizInstance1 = new QuizInstance();
-        quizInstance1.setUser(userRepository.findUserById(quizInstance.getUser()));
+        quizInstance1.setUserStudent(userStudentRepository.findStudentById(quizInstance.getUser()));
         quizInstance1.setQuiz(quizRepository.findQuizById(quizInstance.getQuiz()));
         quizInstance1.setGrade(quizInstance.getGrade());
-        quizInstance1.setAssignedBy(userRepository.findUserById(quizInstance.getAssignedBy()));
+        quizInstance1.setAssignedBy(userTeacherRepository.findTeacherById(quizInstance.getAssignedBy()));
         quizInstance1.setStartedAt(quizInstance.getStartedAt());
         quizInstance1.setFinishedAt(quizInstance.getFinishedAt());
 

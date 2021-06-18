@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserTeacherRepository extends JpaRepository<UserTeacher, Integer> {
     UserTeacher findTeacherById(Integer id);
+    UserTeacher findTeacherByUserId(Integer id);
 }

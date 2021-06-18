@@ -1,6 +1,7 @@
 package com.project.StudentHub.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
@@ -32,6 +33,7 @@ public class User implements Serializable {
     @Email(message = "Email should be valid")
     private String email;
 
+    @JsonIgnore
     private String password;
 
     @Column(length = 15)

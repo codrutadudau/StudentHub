@@ -1,5 +1,6 @@
 package com.project.StudentHub.controller;
 
+import com.google.common.collect.Lists;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Course;
 import com.project.StudentHub.model.UserTeacher;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,7 +27,11 @@ public class UserTeacherController {
     }
 
     @GetMapping("/user_teachers")
-    public Iterable<UserTeacher> getTeacher(){
+    public List<UserTeacher> getTeachers(@RequestParam("user") Optional<Integer> userId){
+        if (userId.isPresent()) {
+            return Lists.newArrayList(userTeacherRepository.findTeacherById(userId.get()));
+        }
+
         return userTeacherRepository.findAll();
     }
 

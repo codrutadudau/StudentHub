@@ -37,6 +37,11 @@ public class Quiz {
     @JsonIgnore
     private Collection<QuizInstance> quizInstances;
 
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    @JsonIgnore
+    private Course course;
+
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(
@@ -117,5 +122,13 @@ public class Quiz {
 
     public void setQuizInstances(Collection<QuizInstance> quizInstances) {
         this.quizInstances = quizInstances;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

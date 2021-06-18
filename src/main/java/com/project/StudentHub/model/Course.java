@@ -19,6 +19,10 @@ public class Course {
     @NotEmpty
     private String name;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    @JsonIgnore
+    private Collection<Quiz> quizzes;
+
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(
@@ -62,5 +66,13 @@ public class Course {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Collection<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(Collection<Quiz> quizzes) {
+        this.quizzes = quizzes;
     }
 }

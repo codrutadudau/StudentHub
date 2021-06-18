@@ -1,6 +1,7 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.exception.ResourceNotFoundException;
+import com.project.StudentHub.model.Course;
 import com.project.StudentHub.model.UserTeacher;
 import com.project.StudentHub.repository.UserTeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,16 @@ public class UserTeacherController {
     @GetMapping("/user_teachers")
     public Iterable<UserTeacher> getTeacher(){
         return userTeacherRepository.findAll();
+    }
+
+    @GetMapping("/user_teachers/{id}/courses")
+    public Iterable<Course> getTeacherCourses(@PathVariable Integer id){
+        Optional<UserTeacher> userTeacher = Optional.ofNullable(userTeacherRepository.findTeacherById(id));
+        if(!userTeacher.isPresent()) {
+            throw new ResourceNotFoundException("Teacher with id: " + id + " not found");
+        }
+
+        return userTeacher.get().getCourses();
     }
 
     @GetMapping("/user_teachers/{id}")

@@ -14,9 +14,9 @@ public class UserTeacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name="user_id")
+    @JoinColumn(unique = true, name="user_id", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy = "userTeacher")

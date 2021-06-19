@@ -44,6 +44,9 @@ public class User implements Serializable {
     @Column
     private boolean enabled;
 
+    @OneToOne(mappedBy = "user")
+    private UserTeacher userTeacher;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

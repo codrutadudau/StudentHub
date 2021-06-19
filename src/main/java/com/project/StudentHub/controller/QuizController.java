@@ -19,10 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -85,20 +82,18 @@ public class QuizController {
         }
 
         ArrayList<Object> response = new ArrayList<>();
-//        for (Quiz q : quizRepository.findAll()) {
-            System.out.print(quizRepository.findAll());
-//            JSONObject enrichedQuiz = new JSONObject();
-//            enrichedQuiz.put("id", q.getId());
-////            enrichedQuiz.put("name", q.getName());
-////            enrichedQuiz.put("quizIntro", q.getQuizIntro());
-////            enrichedQuiz.put("timeOpen", q.getTimeOpen());
-////            enrichedQuiz.put("timeClose", q.getTimeClose());
-////            enrichedQuiz.put("password", q.getPassword());
-////            enrichedQuiz.put("course", q.getCourse().getName());
-//
-//            response.add(enrichedQuiz);
-//        }
+        for (Quiz q : quizRepository.findAll()) {
+            Map<String, Object> json = new HashMap();
+            json.put("id", q.getId());
+            json.put("name", q.getName());
+            json.put("quizIntro", q.getQuizIntro());
+            json.put("timeOpen", q.getTimeOpen());
+            json.put("timeClose", q.getTimeClose());
+            json.put("password", q.getPassword());
+            json.put("course", q.getCourse().getName());
 
+            response.add(json);
+        }
         return response;
     }
 

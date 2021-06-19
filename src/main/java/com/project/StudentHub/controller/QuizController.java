@@ -68,7 +68,7 @@ public class QuizController {
     @GetMapping("/quizzes")
     public List<Quiz> getQuiz(@RequestParam("course") Optional<Integer> courseId){
         if (courseId.isPresent()) {
-            return Lists.newArrayList(quizRepository.findQuizByCourseId(courseId.get()));
+            return Lists.newArrayList(quizRepository.findByCourseId(courseId.get()));
         }
 
         return quizRepository.findAll();

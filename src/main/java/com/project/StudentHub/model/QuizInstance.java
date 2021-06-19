@@ -23,6 +23,9 @@ public class QuizInstance {
     @Column
     private LocalDateTime finishedAt;
 
+    @Column
+    private LocalDateTime assignedAt;
+
     @ManyToOne
     @JoinColumn(name = "user_student_id")
     @JsonIgnore
@@ -90,5 +93,13 @@ public class QuizInstance {
 
     public void setAssignedBy(UserTeacher assignedBy) {
         this.assignedBy = assignedBy;
+    }
+
+    public LocalDateTime getAssignedAt() {
+        return assignedAt;
+    }
+
+    public void setAssignedAt(LocalDateTime assignedAt) {
+        this.assignedAt = assignedAt;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +38,7 @@ public class QuizInstanceController {
         quizInstance1.setGrade(quizInstance.getGrade());
         quizInstance1.setAssignedBy(userTeacherRepository.findTeacherById(quizInstance.getAssignedBy()));
         quizInstance1.setStartedAt(quizInstance.getStartedAt());
+        quizInstance1.setAssignedAt(LocalDateTime.now());
         quizInstance1.setFinishedAt(quizInstance.getFinishedAt());
 
         return quizInstanceRepository.save(quizInstance1);

@@ -19,11 +19,11 @@ public class UserStudent {
     private String identificationNumber;
 
     @OneToOne
-    @JoinColumn(name="classroom_id")
+    @JoinColumn(unique = true, name="user_id", referencedColumnName = "id")
     private Classroom classroom;
 
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(unique = true, name="user_id", referencedColumnName = "id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStudent")

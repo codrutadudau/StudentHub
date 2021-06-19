@@ -27,8 +27,8 @@ public class Course {
     @JsonIgnore
     @JoinTable(
             name = "classrooms_courses",
-            joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id")
+            joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "id")
     )
     private Collection<Classroom> classrooms;
 

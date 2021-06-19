@@ -2,8 +2,9 @@ package com.project.StudentHub.controller;
 
 import com.project.StudentHub.dto.ClassroomDto;
 import com.project.StudentHub.exception.ResourceNotFoundException;
-import com.project.StudentHub.model.Classroom;
+import com.project.StudentHub.model.*;
 import com.project.StudentHub.repository.ClassroomRepository;
+import com.project.StudentHub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,9 @@ import java.util.*;
 public class ClassroomController {
     @Autowired
     private ClassroomRepository classroomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/classrooms")
     public Classroom addClassroom(@Valid @RequestBody ClassroomDto classroom){
@@ -39,6 +43,29 @@ public class ClassroomController {
 
         return classroom
                 .orElseThrow(() -> new ResourceNotFoundException("Classroom with id: " + id + " not found"));
+    }
+
+    @GetMapping("/classrooms/{id}/students")
+    public ArrayList<Object> getClassroomStudents(@PathVariable Integer id){
+        Optional<Classroom> classroom = Optional.ofNullable(classroomRepository.findClassroomById(id));
+        if(!classroom.isPresent()) {
+            throw new ResourceNotFoundException("Classroom with id: " + id + " not found");
+        }
+
+        Collection<UserStudent> userStudents = classroom.get().getUserStudents();
+
+        ArrayList<Object> students = new ArrayList<>();
+        for (UserStudent s : userStudents) {
+            HashMap<Object, Object> student = new HashMap<>();
+            User userStudent = userRepository.findUserById(s.getUser().getId());
+            student.put("studentId", s.getId());
+            student.put("firstName", userStudent.getFirstName());
+            student.put("lastName", userStudent.getLastName());
+            student.put("email", userStudent.getEmail());
+            students.add(student);
+        }
+
+        return students;
     }
 
     @DeleteMapping("/classrooms/{id}")

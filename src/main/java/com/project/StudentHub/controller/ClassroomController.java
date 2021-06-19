@@ -5,6 +5,7 @@ import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.*;
 import com.project.StudentHub.repository.ClassroomRepository;
 import com.project.StudentHub.repository.UserRepository;
+import com.project.StudentHub.repository.UserStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,9 @@ public class ClassroomController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserStudentRepository userStudentRepository;
 
     @PostMapping("/classrooms")
     public Classroom addClassroom(@Valid @RequestBody ClassroomDto classroom){
@@ -62,6 +66,7 @@ public class ClassroomController {
             student.put("firstName", userStudent.getFirstName());
             student.put("lastName", userStudent.getLastName());
             student.put("email", userStudent.getEmail());
+            student.put("hasInProgressQuizzes", userStudentRepository.hasInProgressQuizzes(userStudentRepository.findUserStudentById(s.getId())));
             students.add(student);
         }
 

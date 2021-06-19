@@ -3,7 +3,6 @@ package com.project.StudentHub.controller;
 import com.google.common.collect.Lists;
 import com.project.StudentHub.dto.QuizDto;
 import com.project.StudentHub.exception.ResourceNotFoundException;
-import com.project.StudentHub.model.Course;
 import com.project.StudentHub.model.Question;
 import com.project.StudentHub.dto.QuestionDto;
 import com.project.StudentHub.model.Quiz;
@@ -16,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,9 +66,9 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes")
-    public List<?> getQuiz(@RequestParam("course") Optional<Integer> courseId){
+    public List<Quiz> getQuiz(@RequestParam("course") Optional<Integer> courseId){
         if (courseId.isPresent()) {
-            return Lists.newArrayList(courseRepository.findCourseById(courseId.get()));
+            return Lists.newArrayList(quizRepository.findQuizByCourseId(courseId.get()));
         }
 
         return quizRepository.findAll();

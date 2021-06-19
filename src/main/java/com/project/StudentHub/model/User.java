@@ -104,4 +104,12 @@ public class User implements Serializable {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    public UserTeacher getUserTeacher() {
+        return userTeacher;
+    }
+
+    public void setUserTeacher(UserTeacher userTeacher) {
+        this.userTeacher = userTeacher;
+    }
 }

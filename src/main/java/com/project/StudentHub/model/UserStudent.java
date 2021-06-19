@@ -18,8 +18,8 @@ public class UserStudent {
     @NotEmpty
     private String identificationNumber;
 
-    @OneToOne
-    @JoinColumn(unique = true, name="user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name="classroom_id", referencedColumnName = "id")
     private Classroom classroom;
 
     @OneToOne
@@ -31,14 +31,6 @@ public class UserStudent {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStudent")
     private Collection<AnswerOption> answerOptions;
-
-    public Collection<AnswerOption> getAnswerOptions() {
-        return answerOptions;
-    }
-
-    public void setAnswerOptions(Collection<AnswerOption> answerOptions) {
-        this.answerOptions = answerOptions;
-    }
 
     public int getId() {
         return id;
@@ -78,5 +70,13 @@ public class UserStudent {
 
     public void setQuizInstances(Collection<QuizInstance> quizInstances) {
         this.quizInstances = quizInstances;
+    }
+
+    public Collection<AnswerOption> getAnswerOptions() {
+        return answerOptions;
+    }
+
+    public void setAnswerOptions(Collection<AnswerOption> answerOptions) {
+        this.answerOptions = answerOptions;
     }
 }

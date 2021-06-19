@@ -50,4 +50,12 @@ public class UserTeacher {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Collection<QuizInstance> getQuizInstances() {
+        return quizInstances;
+    }
+
+    public void setQuizInstances(Collection<QuizInstance> quizInstances) {
+        this.quizInstances = quizInstances;
+    }
 }

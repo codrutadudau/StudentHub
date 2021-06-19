@@ -22,17 +22,13 @@ public class Classroom {
     @Column(columnDefinition = "integer default 0")
     private int year;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "classroom")
+    @JsonIgnore
+    private Collection<UserStudent> userStudents;
+
     @ManyToMany(mappedBy = "classrooms")
     @JsonIgnore
     private Collection<Course> courses;
-
-    public Collection<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Collection<Course> courses) {
-        this.courses = courses;
-    }
 
     public int getId() {
         return id;
@@ -56,5 +52,21 @@ public class Classroom {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public Collection<UserStudent> getUserStudents() {
+        return userStudents;
+    }
+
+    public void setUserStudents(Collection<UserStudent> userStudents) {
+        this.userStudents = userStudents;
+    }
+
+    public Collection<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Collection<Course> courses) {
+        this.courses = courses;
     }
 }

@@ -6,15 +6,21 @@ import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Question;
 import com.project.StudentHub.dto.QuestionDto;
 import com.project.StudentHub.model.Quiz;
+import com.project.StudentHub.model.User;
+import com.project.StudentHub.model.UserStudent;
 import com.project.StudentHub.repository.CourseRepository;
 import com.project.StudentHub.repository.QuestionRepository;
 import com.project.StudentHub.repository.QuizRepository;
+import com.project.StudentHub.repository.UserTeacherRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +36,9 @@ public class QuizController {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private UserTeacherRepository userTeacherRepository;
 
     @PostMapping("/quizzes")
     public Quiz addQuiz(@Valid @RequestBody QuizDto quiz){
@@ -66,12 +75,31 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes")
-    public List<Quiz> getQuiz(@RequestParam("course") Optional<Integer> courseId){
+    public ArrayList<Object> getQuiz(@RequestParam("course") Optional<Integer> courseId, @RequestParam("teacher") Optional<Integer> teacherId){
         if (courseId.isPresent()) {
             return Lists.newArrayList(quizRepository.findByCourseId(courseId.get()));
         }
 
-        return quizRepository.findAll();
+        if (teacherId.isPresent()) {
+            return Lists.newArrayList(quizRepository.findQuizzesByUserTeacher(userTeacherRepository.findTeacherById(teacherId.get())));
+        }
+
+        ArrayList<Object> response = new ArrayList<>();
+//        for (Quiz q : quizRepository.findAll()) {
+            System.out.print(quizRepository.findAll());
+//            JSONObject enrichedQuiz = new JSONObject();
+//            enrichedQuiz.put("id", q.getId());
+////            enrichedQuiz.put("name", q.getName());
+////            enrichedQuiz.put("quizIntro", q.getQuizIntro());
+////            enrichedQuiz.put("timeOpen", q.getTimeOpen());
+////            enrichedQuiz.put("timeClose", q.getTimeClose());
+////            enrichedQuiz.put("password", q.getPassword());
+////            enrichedQuiz.put("course", q.getCourse().getName());
+//
+//            response.add(enrichedQuiz);
+//        }
+
+        return response;
     }
 
     @GetMapping("/quizzes/{id}")

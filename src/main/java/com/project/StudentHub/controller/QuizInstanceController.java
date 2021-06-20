@@ -1,5 +1,6 @@
 package com.project.StudentHub.controller;
 
+import com.google.common.collect.Lists;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.QuizInstance;
 import com.project.StudentHub.dto.QuizInstanceDto;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -45,7 +47,11 @@ public class QuizInstanceController {
     }
 
     @GetMapping("/quiz_instances")
-    public Iterable<QuizInstance> getQuizInstances(){
+    public List<QuizInstance> getQuizInstances(@RequestParam("user") Optional<Integer> userId){
+        if (userId.isPresent()) {
+            return quizInstanceRepository.findQuizInstancesByUserId(userId.get());
+        }
+
         return quizInstanceRepository.findAll();
     }
 
@@ -66,20 +72,33 @@ public class QuizInstanceController {
     @PutMapping("/quiz_instances/{id}")
     public ResponseEntity<Object> updateQuizInstance(@Valid @RequestBody QuizInstanceDto quizInstance, @PathVariable Integer id){
         Optional<QuizInstance> quizInstanceOptional = Optional.ofNullable(quizInstanceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Student with id: " + id + " not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz instance with id: " + id + " not found")));
         if(!quizInstanceOptional.isPresent())
             return ResponseEntity.notFound().build();
 
-        QuizInstance quizInstance1 = new QuizInstance();
-        quizInstance1.setId(id);
-        quizInstance1.setQuiz(quizRepository.findQuizById(quizInstance.getQuiz()));
-        quizInstance1.setUserStudent(userStudentRepository.findUserStudentById(quizInstance.getUserStudent()));
-        quizInstance1.setAssignedBy(userTeacherRepository.findTeacherById(quizInstance.getAssignedBy()));
-        quizInstance1.setStartedAt(quizInstance.getStartedAt());
-        quizInstance1.setFinishedAt(quizInstance.getFinishedAt());
-        quizInstance1.setGrade(quizInstance.getGrade());
+        QuizInstance qi = quizInstanceOptional.get();
+        qi.setStartedAt(quizInstance.getStartedAt());
+        qi.setFinishedAt(quizInstance.getFinishedAt());
+        qi.setGrade(quizInstance.getGrade());
 
-        quizInstanceRepository.save(quizInstance1);
+        quizInstanceRepository.save(qi);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/quiz_instances/{id}/start")
+    public ResponseEntity<Object> startQuiz(@PathVariable Integer id){
+        Optional<QuizInstance> quizInstanceOptional = Optional.ofNullable(quizInstanceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz instance with id: " + id + " not found")));
+        if(!quizInstanceOptional.isPresent())
+            return ResponseEntity.notFound().build();
+
+        QuizInstance qi = quizInstanceOptional.get();
+        if (qi.getStartedAt() == null) {
+            qi.setStartedAt(LocalDateTime.now());
+        }
+
+        quizInstanceRepository.save(qi);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,5 +1,6 @@
 package com.project.StudentHub.controller;
 
+import com.google.common.collect.Lists;
 import com.project.StudentHub.dto.ClassroomDto;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.*;
@@ -37,7 +38,11 @@ public class ClassroomController {
     }
 
     @GetMapping("/classrooms")
-    public Iterable<Classroom> getClassroom(){
+    public List<Classroom> getClassroom(@RequestParam("user") Optional<Integer> userId){
+        if (userId.isPresent()) {
+            return Lists.newArrayList(classroomRepository.findStudentClassroomByUserId(userId.get()));
+        }
+
         return classroomRepository.findAll();
     }
 

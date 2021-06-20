@@ -36,15 +36,16 @@ public class QuizController {
 
     @PostMapping("/quizzes")
     public Quiz addQuiz(@Valid @RequestBody QuizDto quiz){
-        Quiz quiz1 = new Quiz();
-        quiz1.setName(quiz.getName());
-        quiz1.setPassword(quiz.getPassword());
-        quiz1.setQuizIntro(quiz.getQuizIntro());
-        quiz1.setTimeOpen(quiz.getTimeOpen());
-        quiz1.setTimeClose(quiz.getTimeClose());
-        quiz1.setCourse(courseRepository.findCourseById(quiz.getCourse()));
+        Quiz q = new Quiz();
+        q.setName(quiz.getName());
+        q.setPassword(quiz.getPassword());
+        q.setQuizIntro(quiz.getQuizIntro());
+        q.setTimeOpen(quiz.getTimeOpen());
+        q.setTimeClose(quiz.getTimeClose());
+        q.setCourse(courseRepository.findCourseById(quiz.getCourse()));
+        q.setDuration(quiz.getDuration());
 
-        return quizRepository.save(quiz1);
+        return quizRepository.save(q);
     }
 
     @PostMapping("/quizzes/{id}/question")
@@ -84,6 +85,7 @@ public class QuizController {
                 json.put("timeOpen", q.getTimeOpen());
                 json.put("timeClose", q.getTimeClose());
                 json.put("password", q.getPassword());
+                json.put("duration", q.getDuration());
                 json.put("courseId", q.getCourse().getId());
                 json.put("courseName", q.getCourse().getName());
 
@@ -102,6 +104,7 @@ public class QuizController {
             json.put("timeOpen", q.getTimeOpen());
             json.put("timeClose", q.getTimeClose());
             json.put("password", q.getPassword());
+            json.put("duration", q.getDuration());
             json.put("courseId", q.getCourse().getId());
             json.put("courseName", q.getCourse().getName());
 
@@ -132,15 +135,15 @@ public class QuizController {
         if(!quizOptional.isPresent())
             return ResponseEntity.notFound().build();
 
-        Quiz quiz1 = new Quiz();
-        quiz1.setId(id);
-        quiz1.setName(quiz.getName());
-        quiz1.setPassword(quiz.getPassword());
-        quiz1.setQuizIntro(quiz.getQuizIntro());
-        quiz1.setTimeOpen(quiz.getTimeOpen());
-        quiz1.setTimeClose(quiz.getTimeClose());
-        quiz1.setCourse(courseRepository.findCourseById(quiz.getCourse()));
-        quizRepository.save(quiz1);
+        Quiz q = quizOptional.get();
+        q.setName(quiz.getName());
+        q.setPassword(quiz.getPassword());
+        q.setQuizIntro(quiz.getQuizIntro());
+        q.setTimeOpen(quiz.getTimeOpen());
+        q.setTimeClose(quiz.getTimeClose());
+        q.setDuration(quiz.getDuration());
+        q.setCourse(courseRepository.findCourseById(quiz.getCourse()));
+        quizRepository.save(q);
 
         return ResponseEntity.noContent().build();
     }

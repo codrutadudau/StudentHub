@@ -33,6 +33,10 @@ public class Quiz {
     @NotEmpty
     private String password;
 
+    @Column
+    @NotEmpty
+    private int duration;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
     @JsonIgnore
     private Collection<QuizInstance> quizInstances;
@@ -130,5 +134,13 @@ public class Quiz {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

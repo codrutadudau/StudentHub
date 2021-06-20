@@ -3,6 +3,7 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.dto.CourseDto;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Course;
+import com.project.StudentHub.model.Quiz;
 import com.project.StudentHub.repository.CourseRepository;
 import com.project.StudentHub.repository.UserTeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,11 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public Iterable<Course> getCourse(){
+    public Iterable<Course> getCourses(@RequestParam("user") Optional<Integer> userId) {
+        if (userId.isPresent()) {
+            return courseRepository.findCoursesForTeacherWithUserId(userId.get());
+        }
+
         return courseRepository.findAll();
     }
 

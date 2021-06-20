@@ -3,6 +3,8 @@ package com.project.StudentHub.dto;
 import java.time.LocalDateTime;
 
 public class QuizDto {
+    private int id;
+
     private String name;
 
     private String quizIntro;
@@ -61,5 +63,13 @@ public class QuizDto {
 
     public void setCourse(int course) {
         this.course = course;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

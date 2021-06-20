@@ -6,13 +6,10 @@ import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Question;
 import com.project.StudentHub.dto.QuestionDto;
 import com.project.StudentHub.model.Quiz;
-import com.project.StudentHub.model.User;
-import com.project.StudentHub.model.UserStudent;
 import com.project.StudentHub.repository.CourseRepository;
 import com.project.StudentHub.repository.QuestionRepository;
 import com.project.StudentHub.repository.QuizRepository;
 import com.project.StudentHub.repository.UserTeacherRepository;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -78,7 +75,22 @@ public class QuizController {
         }
 
         if (teacherId.isPresent()) {
-            return Lists.newArrayList(quizRepository.findQuizzesByUserTeacher(userTeacherRepository.findTeacherById(teacherId.get())));
+            ArrayList<Object> response = new ArrayList<>();
+            for (Quiz q : quizRepository.findQuizzesByUserTeacher(userTeacherRepository.findTeacherById(teacherId.get()))) {
+                Map<String, Object> json = new HashMap();
+                json.put("id", q.getId());
+                json.put("name", q.getName());
+                json.put("quizIntro", q.getQuizIntro());
+                json.put("timeOpen", q.getTimeOpen());
+                json.put("timeClose", q.getTimeClose());
+                json.put("password", q.getPassword());
+                json.put("courseId", q.getCourse().getId());
+                json.put("courseName", q.getCourse().getName());
+
+                response.add(json);
+            }
+
+            return response;
         }
 
         ArrayList<Object> response = new ArrayList<>();
@@ -90,10 +102,12 @@ public class QuizController {
             json.put("timeOpen", q.getTimeOpen());
             json.put("timeClose", q.getTimeClose());
             json.put("password", q.getPassword());
-            json.put("course", q.getCourse().getName());
+            json.put("courseId", q.getCourse().getId());
+            json.put("courseName", q.getCourse().getName());
 
             response.add(json);
         }
+
         return response;
     }
 
@@ -112,13 +126,22 @@ public class QuizController {
     }
 
     @PutMapping("/quizzes/{id}")
-    public ResponseEntity<Object> updateQuiz(@Valid @RequestBody Quiz quiz, @PathVariable Integer id){
+    public ResponseEntity<Object> updateQuiz(@Valid @RequestBody QuizDto quiz, @PathVariable Integer id){
         Optional<Quiz> quizOptional = Optional.ofNullable(quizRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz with id: " + id + " not found")));
         if(!quizOptional.isPresent())
             return ResponseEntity.notFound().build();
-        quiz.setId(id);
-        quizRepository.save(quiz);
+
+        Quiz quiz1 = new Quiz();
+        quiz1.setId(id);
+        quiz1.setName(quiz.getName());
+        quiz1.setPassword(quiz.getPassword());
+        quiz1.setQuizIntro(quiz.getQuizIntro());
+        quiz1.setTimeOpen(quiz.getTimeOpen());
+        quiz1.setTimeClose(quiz.getTimeClose());
+        quiz1.setCourse(courseRepository.findCourseById(quiz.getCourse()));
+        quizRepository.save(quiz1);
+
         return ResponseEntity.noContent().build();
     }
 }

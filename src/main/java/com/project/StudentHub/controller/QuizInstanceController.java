@@ -1,8 +1,7 @@
 package com.project.StudentHub.controller;
 
-import com.google.common.collect.Lists;
 import com.project.StudentHub.exception.ResourceNotFoundException;
-import com.project.StudentHub.model.QuizInstance;
+import com.project.StudentHub.model.*;
 import com.project.StudentHub.dto.QuizInstanceDto;
 import com.project.StudentHub.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
 @Validated
 public class QuizInstanceController {
+
+    @Autowired
+    private AnswerOptionRepository answerOptionRepository;
 
     @Autowired
     private QuizInstanceRepository quizInstanceRepository;
@@ -53,6 +54,40 @@ public class QuizInstanceController {
         }
 
         return quizInstanceRepository.findAll();
+    }
+
+    @GetMapping("/quiz_instances/{id}/answers")
+    public ArrayList<Object> getQuizInstanceAnswers(@PathVariable Integer id){
+        Optional<QuizInstance> quizInstanceOptional = Optional.ofNullable(quizInstanceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz instance with id: " + id + " not found")));
+
+        ArrayList<Object> response = new ArrayList<>();
+
+        QuizInstance quizInstance = quizInstanceOptional.get();
+        UserStudent userStudent = quizInstance.getUserStudent();
+        Quiz quiz = quizInstance.getQuiz();
+        Collection<Question> questions = quiz.getQuestions();
+        for (Question q : questions) {
+            HashMap<Object, Object> questionAnswers = new HashMap<Object, Object>();
+            Collection<Answer> answers = q.getAnswers();
+            ArrayList<Object> userOptionAnswers = new ArrayList<>();
+            for (Answer a : answers) {
+                HashMap<String, String> enrichedAnswer = new HashMap<String, String>();
+                enrichedAnswer.put("id", String.valueOf(a.getId()));
+                enrichedAnswer.put("correct", a.isCorrect() ? "true" : "false");
+                enrichedAnswer.put("description", a.getDescription());
+                enrichedAnswer.put("question_id", String.valueOf(a.getQuestion().getId()));
+                boolean hasAnswerOption = answerOptionRepository.hasAnswerOptionForUserStudentIdAndAnswerId(userStudent.getId(), a.getId()) > 0;
+                enrichedAnswer.put("checkedByUser", hasAnswerOption ? "true" : "false");
+                userOptionAnswers.add(enrichedAnswer);
+            }
+
+            questionAnswers.put("question", q);
+            questionAnswers.put("answers", userOptionAnswers);
+            response.add(questionAnswers);
+        }
+
+        return response;
     }
 
     @GetMapping("/quiz_instances/{id}")

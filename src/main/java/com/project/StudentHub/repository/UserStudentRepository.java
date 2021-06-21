@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserStudentRepository extends JpaRepository<UserStudent, Integer>{
     UserStudent findUserStudentById(Integer id);
+    UserStudent findByUserId(Integer id);
 
     @Query("SELECT COUNT(qi) FROM QuizInstance qi WHERE qi.finishedAt IS NULL AND qi.userStudent = ?1")
     Integer hasInProgressQuizzes(UserStudent userStudent);

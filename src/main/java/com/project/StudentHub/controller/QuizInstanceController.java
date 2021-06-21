@@ -77,9 +77,10 @@ public class QuizInstanceController {
             return ResponseEntity.notFound().build();
 
         QuizInstance qi = quizInstanceOptional.get();
-        qi.setStartedAt(quizInstance.getStartedAt());
-        qi.setFinishedAt(quizInstance.getFinishedAt());
-        qi.setGrade(quizInstance.getGrade());
+        if (qi.getFinishedAt() == null) {
+            qi.setFinishedAt(LocalDateTime.now());
+            qi.setGrade(quizInstance.getGrade());
+        }
 
         quizInstanceRepository.save(qi);
 

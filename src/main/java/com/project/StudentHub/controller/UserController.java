@@ -42,6 +42,7 @@ public class UserController {
         return user
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found"));
     }
+
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Integer id){
         User userDelete= userRepository.findById(id)
@@ -57,6 +58,19 @@ public class UserController {
             return ResponseEntity.notFound().build();
         user.setId(id);
         userRepository.save(user);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/users/{id}/enable")
+    public ResponseEntity<Object> updateUser(@PathVariable Integer id){
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found")));
+        if(userOptional.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        userOptional.get().setEnabled(true);
+        userRepository.save(userOptional.get());
+
         return ResponseEntity.noContent().build();
     }
 

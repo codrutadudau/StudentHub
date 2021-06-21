@@ -29,7 +29,7 @@ public class AnswerOptionController {
     @PostMapping("/answer_options")
     public AnswerOption addAnswerOption(@Valid @RequestBody AnswerOptionDto answerOption){
         AnswerOption answerOption1 = new AnswerOption();
-        answerOption1.setUserStudent(userStudentRepository.findUserStudentById(answerOption.getUserStudent()));
+        answerOption1.setUserStudent(userStudentRepository.findByUserId(answerOption.getUserStudent()));
         answerOption1.setAnswer(answerRepository.findAnswerById(answerOption.getAnswer()));
 
         return answerOptionRepository.save(answerOption1);

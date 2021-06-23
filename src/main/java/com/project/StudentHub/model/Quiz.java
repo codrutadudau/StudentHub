@@ -34,7 +34,6 @@ public class Quiz {
     private String password;
 
     @Column
-    @NotEmpty
     private int duration;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
@@ -43,7 +42,6 @@ public class Quiz {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    @JsonIgnore
     private Course course;
 
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)

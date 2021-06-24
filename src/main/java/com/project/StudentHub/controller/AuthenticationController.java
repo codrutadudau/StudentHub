@@ -69,9 +69,7 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public User registerUser(@RequestBody UserDto accountDto) throws EmailExistsException, ValidationException {
         if (emailExist(accountDto.getEmail())) {
-            JSONObject error = new JSONObject();
-            error.put("email", "This email already exists");
-            throw new ResponseStatusException(HttpStatus.CONFLICT, error.toString());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This email already exists");
         }
 
         User user = new User();
@@ -81,9 +79,22 @@ public class AuthenticationController {
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setPhoneNumber(accountDto.getPhoneNumber());
 
+        if (user.getFirstName().length() < 3) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The first name should have at least 3 characters");
+        }
+
+        if (user.getLastName().length() < 3) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The last name should have at least 3 characters");
+        }
+
         user.setRole(roleRepository.findByName("ROLE_USER"));
 
-        emailService.sendEmail(user);
+        User userTo = userRepository.findByEmail("admin@info.uaic.ro");
+        String subject = "New registration: " + user.getFirstName() +" " + user.getLastName();
+        String content = "The user " + user.getFirstName() +" " + user.getLastName() + " with the email address " +
+                user.getEmail() + " has registered. Please validate the account from the admin panel or delete the account.";
+
+        emailService.sendEmail(user, userTo, subject, content);
         return userRepository.save(user);
     }
 

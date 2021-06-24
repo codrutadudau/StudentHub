@@ -48,13 +48,13 @@ public class RolePrivilegeSetupDataLoader implements ApplicationListener<Context
         createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
         createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
 
-        if (null == userRepository.findByEmail("admin@admin.com")) {
+        if (null == userRepository.findByEmail("admin@info.uaic.ro")) {
             Role adminRole = roleRepository.findByName("ROLE_ADMIN");
             User user = new User();
             user.setFirstName("Admin");
             user.setLastName("Admin");
             user.setPassword(passwordEncoder.encode("admin1234"));
-            user.setEmail("admin@admin.com");
+            user.setEmail("admin@info.uaic.ro");
             user.setPhoneNumber("0712345678");
             user.setRole(adminRole);
             user.setEnabled(true);

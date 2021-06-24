@@ -18,7 +18,7 @@ public class EmailService {
         this.emailConfiguration = emailConfiguration;
     }
 
-    public void sendEmail(User user) throws ValidationException {
+    public void sendEmail(User from, User to, String subject, String content) throws ValidationException {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(this.emailConfiguration.getHost());
         javaMailSender.setPort(this.emailConfiguration.getPort());
@@ -26,10 +26,10 @@ public class EmailService {
         javaMailSender.setPassword(this.emailConfiguration.getPassword());
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(user.getEmail());
-        simpleMailMessage.setTo("admin@admin.com");
-        simpleMailMessage.setSubject(user.getFirstName()+" " + user.getLastName() + " has registered");
-        simpleMailMessage.setText("Email text to be replaced");
+        simpleMailMessage.setFrom(from.getEmail());
+        simpleMailMessage.setTo(to.getEmail());
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(content);
 
         javaMailSender.send(simpleMailMessage);
     }

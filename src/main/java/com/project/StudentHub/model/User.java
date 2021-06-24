@@ -20,12 +20,12 @@ public class User implements Serializable {
 
     @Column(length = 100)
     @NotEmpty
-    @Size(min = 2, message = "First Name should have at lest 2 characters")
+    @Size(min = 3, message = "The first name should have at lest 3 characters")
     private String firstName;
 
     @Column(length = 100)
     @NotEmpty
-    @Size(min = 2, message = "Last Name should have at lest 2 characters")
+    @Size(min = 3, message = "The last name should have at lest 3 characters")
     private String lastName;
 
     @Column(length = 100, unique = true)
@@ -38,7 +38,7 @@ public class User implements Serializable {
 
     @Column(length = 15)
     @NotEmpty
-    @Size(min = 10, max = 15, message = "Phone Number should not be less than 10 characters")
+    @Size(min = 10, max = 15, message = "The phone number should have between 10 and 15 characters")
     private String phoneNumber;
 
     @Column

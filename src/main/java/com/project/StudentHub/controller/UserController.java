@@ -4,6 +4,7 @@ import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.model.User;
+import com.project.StudentHub.services.EmailService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.bind.ValidationException;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -19,6 +21,9 @@ import java.util.Optional;
 @RequestMapping("/api")
 @Validated
 public class UserController {
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private UserRepository userRepository;
@@ -62,13 +67,21 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}/enable")
-    public ResponseEntity<Object> updateUser(@PathVariable Integer id){
+    public ResponseEntity<Object> updateUser(@PathVariable Integer id) throws ValidationException {
         Optional<User> userOptional = Optional.ofNullable(userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found")));
         if(userOptional.isEmpty())
             return ResponseEntity.notFound().build();
 
-        userOptional.get().setEnabled(true);
+        if (!userOptional.get().isEnabled()) {
+            userOptional.get().setEnabled(true);
+
+            User userFrom = userRepository.findByEmail("admin@info.uaic.ro");
+            String subject = "Account validated";
+            String content = "Your account on StudentHub has been validated. You can now log into your account.";
+            emailService.sendEmail(userFrom, userOptional.get(), subject, content);
+        }
+
         userRepository.save(userOptional.get());
 
         return ResponseEntity.noContent().build();

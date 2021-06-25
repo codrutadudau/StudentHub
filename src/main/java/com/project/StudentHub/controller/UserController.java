@@ -1,5 +1,6 @@
 package com.project.StudentHub.controller;
 
+import com.project.StudentHub.dto.getStudentProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.repository.AnswerRepository;
 import com.project.StudentHub.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @RestController

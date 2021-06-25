@@ -1,6 +1,7 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.dto.UserStudentDto;
+import com.project.StudentHub.dto.getStudentProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.UserStudent;
 import com.project.StudentHub.repository.ClassroomRepository;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,6 +49,11 @@ public class UserStudentController {
         Optional<UserStudent> user = Optional.ofNullable(userStudentRepository.findUserStudentById(id));
         return user
                 .orElseThrow(() -> new ResourceNotFoundException("Student with id: " + id + " not found"));
+    }
+
+    @GetMapping("/user_students/name")
+    public List<getStudentProperties> getStudentsWithName(){
+        return userStudentRepository.findAllStudents();
     }
 
     @DeleteMapping("/user_students/{id}")

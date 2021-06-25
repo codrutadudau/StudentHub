@@ -1,6 +1,7 @@
 package com.project.StudentHub.controller;
 
 import com.google.common.collect.Lists;
+import com.project.StudentHub.dto.getTeacherProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Classroom;
 import com.project.StudentHub.model.Course;
@@ -33,6 +34,11 @@ public class UserTeacherController {
         }
 
         return userTeacherRepository.findAll();
+    }
+
+    @GetMapping("/user_teachers/name")
+    public List<getTeacherProperties> getTeachersWithName(){
+        return userTeacherRepository.findAllTeachers();
     }
 
     @GetMapping("/user_teachers/{id}/courses")

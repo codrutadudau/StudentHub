@@ -1,6 +1,7 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.dto.CourseDto;
+import com.project.StudentHub.dto.getCourseProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Course;
 import com.project.StudentHub.model.Quiz;
@@ -48,6 +49,11 @@ public class CourseController {
 
         return course
                 .orElseThrow(() -> new ResourceNotFoundException("Course with id: " + id + " not found"));
+    }
+
+    @GetMapping("/courses/teacher")
+    public List<getCourseProperties> getCoursesWithTeacherName() {
+        return courseRepository.findAllCoursesWithTeacherName();
     }
 
     @DeleteMapping("/courses/{id}")

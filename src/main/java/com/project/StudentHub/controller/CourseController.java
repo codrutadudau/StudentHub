@@ -71,10 +71,9 @@ public class CourseController {
         if(!courseOptional.isPresent())
             return ResponseEntity.notFound().build();
 
-        Course course1 = new Course();
-        course1.setId(id);
-        course1.setName(course.getName());
-        courseRepository.save(course1);
+        courseOptional.get().setId(id);
+        courseOptional.get().setName(course.getName());
+        courseRepository.save(courseOptional.get());
 
         return ResponseEntity.noContent().build();
     }

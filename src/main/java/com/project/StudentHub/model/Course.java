@@ -23,7 +23,7 @@ public class Course {
     @JsonIgnore
     private Collection<Quiz> quizzes;
 
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(
             name = "classrooms_courses",

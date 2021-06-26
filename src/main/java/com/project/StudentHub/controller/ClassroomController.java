@@ -2,9 +2,11 @@ package com.project.StudentHub.controller;
 
 import com.google.common.collect.Lists;
 import com.project.StudentHub.dto.ClassroomDto;
+import com.project.StudentHub.dto.getClassroomCourseProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.*;
 import com.project.StudentHub.repository.ClassroomRepository;
+import com.project.StudentHub.repository.CourseRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.repository.UserStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ import java.util.*;
 public class ClassroomController {
     @Autowired
     private ClassroomRepository classroomRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -54,6 +59,16 @@ public class ClassroomController {
                 .orElseThrow(() -> new ResourceNotFoundException("Classroom with id: " + id + " not found"));
     }
 
+    @GetMapping("/classrooms/{id}/courses")
+    public List<getClassroomCourseProperties> findClassroomCourses(@PathVariable Integer id) {
+        Optional<Classroom> classroom = Optional.ofNullable(classroomRepository.findClassroomById(id));
+        if(!classroom.isPresent()) {
+            throw new ResourceNotFoundException("Classroom with id: " + id + " not found");
+        }
+
+        return classroomRepository.findAllClassroomCourses(id);
+    }
+
     @GetMapping("/classrooms/{id}/students")
     public ArrayList<Object> getClassroomStudents(@PathVariable Integer id){
         Optional<Classroom> classroom = Optional.ofNullable(classroomRepository.findClassroomById(id));
@@ -84,6 +99,26 @@ public class ClassroomController {
                 .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found")));
 
         classroomRepository.delete(classroomRepository.findClassroomById(id));
+    }
+
+    @PostMapping("/classrooms/{id}/course/{courseId}")
+    public void addClassroomCourse(@PathVariable Integer id, @PathVariable Integer courseId){
+        Optional<Classroom> classroom = Optional.ofNullable(Optional.ofNullable(classroomRepository.findClassroomById(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found")));
+
+        Course course = courseRepository.findCourseById(courseId);
+        classroom.get().addCourse(course);
+        classroomRepository.save(classroom.get());
+    }
+
+    @DeleteMapping("/classrooms/{id}/course/{courseId}")
+    public void deleteClassroomCourse(@PathVariable Integer id, @PathVariable Integer courseId){
+        Optional<Classroom> classroom = Optional.ofNullable(Optional.ofNullable(classroomRepository.findClassroomById(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Question with id: " + id + " not found")));
+
+        Course course = courseRepository.findCourseById(courseId);
+        classroom.get().removeCourse(course);
+        classroomRepository.save(classroom.get());
     }
 
     @PutMapping("/classrooms/{id}")

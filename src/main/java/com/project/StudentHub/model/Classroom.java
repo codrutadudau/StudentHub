@@ -69,4 +69,14 @@ public class Classroom {
     public void setCourses(Collection<Course> courses) {
         this.courses = courses;
     }
+
+    public void removeCourse(Course course) {
+        this.courses.remove(course);
+        course.getClassrooms().remove(this);
+    }
+
+    public void addCourse(Course course) {
+        this.courses.add(course);
+        course.getClassrooms().add(this);
+    }
 }

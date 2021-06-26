@@ -30,7 +30,6 @@ public class Quiz {
     private LocalDateTime timeClose;
 
     @Column
-    @NotEmpty
     private String password;
 
     @Column

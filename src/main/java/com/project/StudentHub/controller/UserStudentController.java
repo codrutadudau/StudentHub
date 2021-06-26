@@ -39,7 +39,7 @@ public class UserStudentController {
     public UserStudent addStudent(@Valid @RequestBody UserStudentDto userStudent){
         UserStudent student = new UserStudent();
         User user = userRepository.findUserById(userStudent.getUser());
-        user.setRole(roleRepository.findByName("USER_STUDENT"));
+        user.setRole(roleRepository.findByName("ROLE_STUDENT"));
         userRepository.save(user);
 
         student.setUser(user);

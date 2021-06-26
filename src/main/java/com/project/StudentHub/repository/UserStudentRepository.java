@@ -15,11 +15,21 @@ public interface UserStudentRepository extends JpaRepository<UserStudent, Intege
     Integer hasInProgressQuizzes(UserStudent userStudent);
 
     @Query(
-            value = "SELECT user.id, user.first_name as firstName, user.last_name as lastName, user_student.id as studentId, user_student.identification_number as identificationNumber, classroom.name as classroomName\n" +
+            value = "SELECT user.id, user.first_name as firstName, user.last_name as lastName, user_student.id as studentId, user_student.identification_number as identificationNumber, classroom.name as classroomName, classroom.id as classroomId\n" +
                     "FROM user\n" +
                     "INNER JOIN user_student ON user.id = user_student.user_id\n" +
                     "INNER JOIN classroom ON classroom.id = user_student.classroom_id\n",
             nativeQuery = true
     )
     List<getStudentProperties> findAllStudents();
+
+    @Query(
+            value = "SELECT user.id, user.first_name as firstName, user.last_name as lastName, user_student.id as studentId, user_student.identification_number as identificationNumber, classroom.name as classroomName, classroom.id as classroomId\n" +
+                    "FROM user\n" +
+                    "INNER JOIN user_student ON user.id = user_student.user_id\n" +
+                    "INNER JOIN classroom ON classroom.id = user_student.classroom_id\n" +
+                    "WHERE user_student.id = ?1",
+            nativeQuery = true
+    )
+    getStudentProperties findStudentById(Integer id);
 }

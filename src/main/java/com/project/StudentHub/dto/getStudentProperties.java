@@ -7,5 +7,6 @@ public interface getStudentProperties {
     String getFirstName();
     String getLastName();
     String getIdentificationNumber();
+    int getClassroomId();
     String getClassroomName();
 }

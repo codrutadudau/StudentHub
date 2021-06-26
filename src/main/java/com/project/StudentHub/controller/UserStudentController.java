@@ -3,8 +3,11 @@ package com.project.StudentHub.controller;
 import com.project.StudentHub.dto.UserStudentDto;
 import com.project.StudentHub.dto.getStudentProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
+import com.project.StudentHub.model.Course;
+import com.project.StudentHub.model.User;
 import com.project.StudentHub.model.UserStudent;
 import com.project.StudentHub.repository.ClassroomRepository;
+import com.project.StudentHub.repository.RoleRepository;
 import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.repository.UserStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +32,17 @@ public class UserStudentController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @PostMapping("/user_students")
     public UserStudent addStudent(@Valid @RequestBody UserStudentDto userStudent){
         UserStudent student = new UserStudent();
-        student.setUser(userRepository.findUserById(userStudent.getUser()));
+        User user = userRepository.findUserById(userStudent.getUser());
+        user.setRole(roleRepository.findByName("USER_STUDENT"));
+        userRepository.save(user);
+
+        student.setUser(user);
         student.setClassroom(classroomRepository.findClassroomById(userStudent.getClassroom()));
         student.setIdentificationNumber(userStudent.getIdentificationNumber());
 
@@ -46,9 +56,7 @@ public class UserStudentController {
 
     @GetMapping("/user_students/{id}")
     public UserStudent findStudentById(@PathVariable Integer id) {
-        Optional<UserStudent> user = Optional.ofNullable(userStudentRepository.findUserStudentById(id));
-        return user
-                .orElseThrow(() -> new ResourceNotFoundException("Student with id: " + id + " not found"));
+        return userStudentRepository.findByUserId(userRepository.findUserById(id).getId());
     }
 
     @GetMapping("/user_students/name")
@@ -58,25 +66,26 @@ public class UserStudentController {
 
     @DeleteMapping("/user_students/{id}")
     public void deleteStudent(@PathVariable Integer id){
-        UserStudent userDelete = userStudentRepository.findById(id)
+        UserStudent userDelete = userStudentRepository.findById(userStudentRepository.findByUserId(id).getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Student with id: " + id + " not found"));
+
+
         userStudentRepository.delete(userDelete);
+        userRepository.delete(userDelete.getUser());
     }
 
     @PutMapping("/user_students/{id}")
     public ResponseEntity<Object> updateStudent(@Valid @RequestBody UserStudentDto userStudent, @PathVariable Integer id){
-        Optional<UserStudent> userStudentOptional = Optional.ofNullable(userStudentRepository.findById(id)
+        Optional<UserStudent> userStudentOptional = Optional.ofNullable(userStudentRepository.findById(userStudentRepository.findByUserId(userStudent.getUser()).getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Student with id: " + id + " not found")));
         if(!userStudentOptional.isPresent())
             return ResponseEntity.notFound().build();
 
-        UserStudent student = new UserStudent();
-        student.setId(id);
-        student.setUser(userRepository.findUserById(id));
-        student.setClassroom(classroomRepository.findClassroomById(userStudent.getClassroom()));
-        student.setIdentificationNumber(userStudent.getIdentificationNumber());
+        userStudentOptional.get().setUser(userRepository.findUserById(id));
+        userStudentOptional.get().setClassroom(classroomRepository.findClassroomById(userStudent.getClassroom()));
+        userStudentOptional.get().setIdentificationNumber(userStudent.getIdentificationNumber());
 
-        userStudentRepository.save(student);
+        userStudentRepository.save(userStudentOptional.get());
 
         return ResponseEntity.noContent().build();
     }

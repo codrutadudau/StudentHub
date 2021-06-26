@@ -1,11 +1,16 @@
 package com.project.StudentHub.controller;
 
 import com.google.common.collect.Lists;
+import com.project.StudentHub.dto.UserTeacherDto;
 import com.project.StudentHub.dto.getTeacherProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Classroom;
 import com.project.StudentHub.model.Course;
+import com.project.StudentHub.model.User;
 import com.project.StudentHub.model.UserTeacher;
+import com.project.StudentHub.repository.CourseRepository;
+import com.project.StudentHub.repository.RoleRepository;
+import com.project.StudentHub.repository.UserRepository;
 import com.project.StudentHub.repository.UserTeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +27,25 @@ public class UserTeacherController {
     @Autowired
     private UserTeacherRepository userTeacherRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
     @PostMapping("/user_teachers")
-    public UserTeacher addTeacher(@Valid @RequestBody UserTeacher userTeacher){
+    public UserTeacher addTeacher(@Valid @RequestBody UserTeacherDto teacher){
+        UserTeacher userTeacher = new UserTeacher();
+
+        User user = userRepository.findUserById(teacher.getUserId());
+        user.setRole(roleRepository.findByName("ROLE_TEACHER"));
+        userRepository.save(user);
+
+        userTeacher.setUser(user);
+
         return userTeacherRepository.save(userTeacher);
     }
 
@@ -73,7 +95,15 @@ public class UserTeacherController {
     public void deleteTeacher(@PathVariable Integer id){
         UserTeacher userDelete = userTeacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher with id: " + id + " not found"));
+
+        Collection<Course> courses = userDelete.getCourses();
+        for (Course c : courses) {
+            c.setUserTeacher(null);
+            courseRepository.save(c);
+        }
+
         userTeacherRepository.delete(userDelete);
+        userRepository.delete(userDelete.getUser());
     }
 
     @PutMapping("/user_teachers/{id}")

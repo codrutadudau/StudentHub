@@ -1,6 +1,7 @@
 package com.project.StudentHub.controller;
 
 import com.project.StudentHub.dto.CourseDto;
+import com.project.StudentHub.dto.getAverageGradeByClassroomProperties;
 import com.project.StudentHub.dto.getCourseProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.Course;
@@ -49,6 +50,11 @@ public class CourseController {
 
         return course
                 .orElseThrow(() -> new ResourceNotFoundException("Course with id: " + id + " not found"));
+    }
+
+    @GetMapping("/courses/averageGradePerClassroom")
+    public List<getAverageGradeByClassroomProperties> getAverageGradePerClassroom() {
+        return courseRepository.getAverageGradePerClassroom();
     }
 
     @GetMapping("/courses/teacher")

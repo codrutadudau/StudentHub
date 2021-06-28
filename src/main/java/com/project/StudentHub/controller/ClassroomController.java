@@ -3,6 +3,7 @@ package com.project.StudentHub.controller;
 import com.google.common.collect.Lists;
 import com.project.StudentHub.dto.ClassroomDto;
 import com.project.StudentHub.dto.getClassroomCourseProperties;
+import com.project.StudentHub.dto.getQuizInstanceProperties;
 import com.project.StudentHub.exception.ResourceNotFoundException;
 import com.project.StudentHub.model.*;
 import com.project.StudentHub.repository.ClassroomRepository;
@@ -86,7 +87,15 @@ public class ClassroomController {
             student.put("firstName", userStudent.getFirstName());
             student.put("lastName", userStudent.getLastName());
             student.put("email", userStudent.getEmail());
-            student.put("hasInProgressQuizzes", userStudentRepository.hasInProgressQuizzes(userStudentRepository.findUserStudentById(s.getId())));
+            student.put("hasInProgressQuizzes", userStudentRepository.hasInProgressQuizzes(s.getId(), classroom.get().getId()));
+            getQuizInstanceProperties qi =  userStudentRepository.getInProgressQuizInstanceForStudentAndClassroom(s.getId(), classroom.get().getId());
+
+            Integer finishedQi = 0;
+            if (null != qi) {
+                finishedQi = qi.getId();
+            }
+
+            student.put("finishedQuizInstance", finishedQi);
             students.add(student);
         }
 

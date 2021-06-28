@@ -1,5 +1,6 @@
 package com.project.StudentHub.repository;
 
+import com.project.StudentHub.dto.getAverageGradeByClassroomProperties;
 import com.project.StudentHub.dto.getCourseProperties;
 import com.project.StudentHub.dto.getStudentProperties;
 import com.project.StudentHub.model.Course;
@@ -29,4 +30,16 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
             nativeQuery = true
     )
     List<getCourseProperties> findAllCoursesWithTeacherName();
+
+    @Query(
+            value = "SELECT c.teacher_id as teacher, c.name as course, cl.name classroom, AVG(NULLIF(qi.grade, 0)) AS average, SUM(CASE WHEN qi.grade > 0 THEN 1 ELSE 0 END) as quizzesTaken\n" +
+                    "FROM quiz_instance qi\n" +
+                    "INNER JOIN quiz q on q.id = qi.quiz_id\n" +
+                    "INNER JOIN course c on c.id = q.course_id\n" +
+                    "INNER JOIN user_student us ON us.id = qi.user_student_id\n" +
+                    "INNER JOIN classroom cl ON cl.id = us.classroom_id\n" +
+                    "GROUP BY us.classroom_id\n",
+            nativeQuery = true
+    )
+    List<getAverageGradeByClassroomProperties> getAverageGradePerClassroom();
 }
